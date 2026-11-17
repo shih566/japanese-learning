@@ -560,9 +560,14 @@
                     <!-- 主題橫幅與學習重點提示 -->
                     <div class="bg-gradient-to-r from-indigoDark to-indigoJP text-white rounded-3xl p-5 sm:p-6 shadow-md mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/15 text-sakura">
-                                TODAY'S AI LESSON
-                            </span>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/15 text-sakura">
+                                    TODAY'S AI LESSON
+                                </span>
+                                <span id="ai-source-status-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amberJP/20 text-amber-200 border border-amberJP/30">
+                                    偵測連線中...
+                                </span>
+                            </div>
                             <h3 id="ai-lesson-topic" class="text-xl sm:text-2xl font-black mt-2">載入中...</h3>
                             <p id="ai-lesson-tip" class="text-xs sm:text-sm text-indigo-100 mt-1.5 leading-relaxed"></p>
                         </div>
@@ -1496,8 +1501,9 @@
                 const cachedRaw = localStorage.getItem('wafu_ai_daily_lesson_v1');
                 if (cachedRaw) {
                     const cached = JSON.parse(cachedRaw);
-                    if (cached.date === todayStr && cached.lesson) {
+                    if (cached.date === todayStr && cached.lesson && cached.isRealAI) {
                         appState.dailyLesson = cached.lesson;
+                        appState.dailyLesson._isRealAI = true;
                         renderDailyAILesson();
                         return;
                     }
@@ -1509,23 +1515,7 @@
             generateDailyAILesson(false);
         }
 
-        // 帶指數退避的重試 Fetch 輔助函式
-        async function fetchWithRetry(url, options, maxRetries = 3) {
-            let delay = 1000;
-            for (let attempt = 0; attempt <= maxRetries; attempt++) {
-                try {
-                    const res = await fetch(url, options);
-                    if (res.ok) return res;
-                    if (attempt === maxRetries) throw new Error(`HTTP ${res.status}`);
-                } catch (err) {
-                    if (attempt === maxRetries) throw err;
-                }
-                await new Promise(r => setTimeout(r, delay));
-                delay *= 2;
-            }
-        }
-
-        // 呼叫 Gemini API 動態生成今日主題單字與情境會話
+        // 呼叫 Gemini API 生成每日新單字（10 個）與完整情境小對話（5~7 句）
         async function generateDailyAILesson(isManualRefresh = false) {
             const loadingEl = document.getElementById('ai-loading-state');
             const contentEl = document.getElementById('ai-lesson-content');
@@ -1539,82 +1529,88 @@
             }
 
             const selectedTheme = document.getElementById('ai-theme-select')?.value || '隨機驚喜微場景';
-            const randomScenario = CREATIVE_MICRO_SCENARIOS[Math.floor(Math.random() * CREATIVE_MICRO_SCENARIOS.length)];
-            const actualTopicGoal = selectedTheme === '隨機驚喜微場景'
-                ? `請以「${randomScenario}」為具體微場景設計課程`
-                : `請圍繞「${selectedTheme}」，並結合「${randomScenario}」的創意切角設計課程`;
+            const randomMicroScene = CREATIVE_MICRO_SCENARIOS[Math.floor(Math.random() * CREATIVE_MICRO_SCENARIOS.length)];
+            const actualTopicHint = selectedTheme === '隨機驚喜微場景' ? randomMicroScene : `${selectedTheme}（具體情境參考：${randomMicroScene}）`;
 
             const masteredCount = appState.masteredIds.length;
-            const usePureKana = masteredCount < 35;
-            const avoidListStr = appState.seenAIWords.length > 0
-                ? `【絕對禁止重複以下過去已學過的單字】：${appState.seenAIWords.join('、')}。請務必挑選全新、不同詞性（名詞、動詞、形容詞混合）的實用單字！`
-                : '';
+            const avoidList = appState.seenAIWords.slice(-80).join('、');
 
-            const prompt = `你是一位幽默且專業的台灣繁體中文日語教師，正在教導一位「零基礎、剛學完或正在學五十音」的台灣學生。
-${actualTopicGoal}。
-學生目前掌握了 ${masteredCount}/46 個五十音。
-${usePureKana ? '【重要規則】因為學生剛起步，所有日文單字與例句「請全部使用純平假名或純片假名」（絕對不要寫出任何漢字！詞與詞之間請加一個半形空格方便初學者斷句拼讀）。' : '【重要規則】日文單字與例句請以平假名／片假名為主（最多穿插1~2個超基礎漢字並附上括號讀音），詞與詞之間請加半形空格方便斷句。'}
-${avoidListStr}
+            const prompt = `你是一位專精於教導台灣零基礎初學者的日語老師。請根據以下條件，設計一堂全新的今日日語微課程：
+- 主題情境：${actualTopicHint}
+- 學生五十音程度：已掌握 ${masteredCount} / 46 個清音。所有日文單字與對話「請全部使用平假名或片假名拼寫，絕對不要使用任何漢字」，並用空格分詞方便初學者閱讀。
+- 防重複限制：以下單字過去已經學過，請「絕對避開」重複出現：${avoidList || '無'}。
 
-請嚴格回傳純 JSON 格式（不要包含 markdown 的 \`\`\`json 標記），結構如下：
+請嚴格回傳純 JSON 格式（不要包含 markdown 標記），結構如下：
 {
-  "topic": "生動有趣的今日課程標題（繁體中文，約8~14字）",
-  "grammarTip": "一句白話、零術語的今日超實用句型或文化小撇步（繁體中文）",
+  "topic": "生動具體的今日主題名稱（繁體中文）",
+  "grammarTip": "一句針對本課對話的白話文語感或助詞小撇步（繁體中文）",
   "words": [
     {
-      "jp": "純假名日文單字",
-      "romaji": "用連字號分隔的羅馬拼音，例如 su - shi",
+      "jp": "純假名單字（共10個不重複實用單字）",
+      "romaji": "羅馬拼音（音節用 - 分隔）",
       "meaning": "繁體中文意思",
       "breakdown": ["假名1", "假名2"],
-      "note": "一句有趣的記憶法或日本生活小知識（繁體中文）"
+      "note": "簡短實用的記憶或使用補充（繁體中文）"
     }
   ],
   "dialogue": [
     {
-      "speaker": "角色A名稱（繁體中文，如：旅客）",
-      "jp": "純假名短句（詞與詞之間用半形空格隔開）",
+      "speaker": "角色名稱（如：店員、旅客）",
+      "jp": "純假名對話句子（共5到7句，形成有起承轉合的完整小故事對話）",
       "romaji": "羅馬拼音",
       "meaning": "繁體中文翻譯",
-      "nuance": "一句白話語感解析（說明這句話中的語氣詞、發音連音或日本人真實說話習慣）"
+      "nuance": "這句話的語氣助詞或日本人說話語感解析（繁體中文）"
     }
   ]
-}
-請確保 words 陣列剛好包含 10 個不同單字。
-【關於 dialogue 的重要要求】：
-請設計成「一齣完整、有頭有尾、自然起承轉合的情境小對話」（不限句數，建議 5 到 7 句），包含「開場招呼 → 互動詢問/點餐/討論 → 意外小插曲或推薦 → 溫暖道謝或結尾」，讓學習者能透過上下文自然體會日語的真實語氣與語感，並自然融入上面教到的新單字！`;
+}`;
 
             const customApiKey = (localStorage.getItem('wafu_custom_gemini_apikey') || '').trim();
             const apiKey = customApiKey || "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            // 依序嘗試多個穩定模型，確保不同地區與免費層級帳號都能 100% 連線成功
+            const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+            let lessonObj = null;
+            let lastErrorMsg = '';
 
             try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: {
-                            temperature: 1.0,
-                            responseMimeType: "application/json"
-                        }
-                    })
-                });
+                for (const modelName of candidateModels) {
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: {
+                                temperature: 1.05,
+                                responseMimeType: "application/json"
+                            }
+                        })
+                    });
 
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    const errMsg = errData?.error?.message || `HTTP ${response.status}`;
-                    throw new Error(errMsg);
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        lastErrorMsg = errData?.error?.message || `HTTP ${response.status}`;
+                        continue; // 嘗試下一個備援模型
+                    }
+
+                    const data = await response.json();
+                    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!rawText) {
+                        lastErrorMsg = 'AI 回傳內容為空';
+                        continue;
+                    }
+
+                    const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+                    const parsed = JSON.parse(cleanJson);
+                    if (parsed.words && Array.isArray(parsed.words) && parsed.words.length > 0) {
+                        lessonObj = parsed;
+                        lessonObj._isRealAI = true;
+                        lessonObj._modelUsed = modelName;
+                        break;
+                    }
                 }
 
-                const data = await response.json();
-                const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!rawText) throw new Error('AI 回傳內容為空');
-
-                const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-                const lessonObj = JSON.parse(cleanJson);
-
-                if (!lessonObj.words || !Array.isArray(lessonObj.words) || lessonObj.words.length === 0) {
-                    throw new Error('AI 資料格式不完整');
+                if (!lessonObj) {
+                    throw new Error(lastErrorMsg || '所有模型皆無法連線');
                 }
 
                 appState.dailyLesson = lessonObj;
@@ -1627,19 +1623,23 @@ ${avoidListStr}
 
                 localStorage.setItem('wafu_ai_daily_lesson_v1', JSON.stringify({
                     date: new Date().toDateString(),
+                    isRealAI: true,
                     lesson: lessonObj
                 }));
 
                 if (isManualRefresh) {
-                    showToast(`✨ AI 已即時生成全新主題：「${lessonObj.topic}」！`, 'success');
+                    showToast(`✨ AI (${lessonObj._modelUsed}) 已即時生成全新主題：「${lessonObj.topic}」！`, 'success');
                 }
             } catch (err) {
                 console.warn('AI 生成改用本地精選微場景題庫:', err);
                 const fallbackIdx = Math.floor(Math.random() * FALLBACK_AI_LESSONS.length);
-                appState.dailyLesson = FALLBACK_AI_LESSONS[fallbackIdx];
+                appState.dailyLesson = {
+                    ...FALLBACK_AI_LESSONS[fallbackIdx],
+                    _isRealAI: false,
+                    _errorReason: !customApiKey ? '尚未輸入 API 金鑰' : err.message
+                };
                 if (isManualRefresh) {
-                    const reason = !customApiKey ? '尚未設定 API 金鑰' : `API 連線異常 (${err.message})`;
-                    showToast(`${reason}，已切換本地精選題庫`, 'warning');
+                    showToast(`⚠️ AI 連線失敗（${appState.dailyLesson._errorReason}），暫時顯示本地範例`, 'warning');
                 }
             } finally {
                 if (loadingEl) loadingEl.classList.add('hidden');
@@ -1655,6 +1655,17 @@ ${avoidListStr}
         function renderDailyAILesson() {
             const lesson = appState.dailyLesson;
             if (!lesson) return;
+
+            const sourceBadge = document.getElementById('ai-source-status-badge');
+            if (sourceBadge) {
+                if (lesson._isRealAI) {
+                    sourceBadge.textContent = `✨ AI 即時生成 (${lesson._modelUsed || 'Gemini'})`;
+                    sourceBadge.className = 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-matcha/30 text-emerald-100 border border-matcha/50';
+                } else {
+                    sourceBadge.textContent = `⚠️ 離線備援題庫（${lesson._errorReason || '未連上 AI'}）`;
+                    sourceBadge.className = 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/30 text-rose-100 border border-rose-400/50';
+                }
+            }
 
             document.getElementById('ai-lesson-topic').textContent = lesson.topic || '今日日語微場景';
             document.getElementById('ai-lesson-tip').textContent = `💡 今日小撇步：${lesson.grammarTip || ''}`;
