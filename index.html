@@ -707,9 +707,9 @@
                     </div>
 
                     <div>
-                        <label for="input-gemini-apikey" class="block text-xs font-bold text-indigoDark mb-1.5">您的 Gemini API Key（僅保存在您的瀏覽器本機）：</label>
+                        <label for="input-gemini-apikey" class="block text-xs font-bold text-indigoDark mb-1.5">您的 Gemini API Key（支援 AIzaSy 或 AQ. 開頭金鑰）：</label>
                         <div class="relative">
-                            <input type="password" id="input-gemini-apikey" placeholder="貼上 AIzaSy 開頭的金鑰..." class="w-full px-3.5 py-2.5 pr-10 rounded-2xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-indigoJP font-mono">
+                            <input type="password" id="input-gemini-apikey" placeholder="貼上 AIzaSy 或 AQ. 開頭的金鑰..." class="w-full px-3.5 py-2.5 pr-10 rounded-2xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-indigoJP font-mono">
                             <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-indigoJP">
                                 <i id="apikey-eye-icon" class="fa-regular fa-eye text-xs"></i>
                             </button>
@@ -1566,19 +1566,24 @@
 
             const customApiKey = (localStorage.getItem('wafu_custom_gemini_apikey') || '').trim();
             const apiKey = customApiKey || "";
-            // 依序嘗試多個穩定模型，確保不同地區與免費層級帳號都能 100% 連線成功
-            const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+            const isExpressKey = apiKey.startsWith('AQ.');
+            // 依序嘗試多個穩定模型，並自動判斷是一般 AIzaSy 金鑰或新版 AQ. Express 金鑰
+            const candidateModels = isExpressKey
+                ? ['gemini-2.5-flash', 'gemini-2.0-flash-001', 'gemini-2.0-flash']
+                : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
             let lessonObj = null;
             let lastErrorMsg = '';
 
             try {
                 for (const modelName of candidateModels) {
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+                    const apiUrl = isExpressKey
+                        ? `https://aiplatform.googleapis.com/v1/publishers/google/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`
+                        : `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            contents: [{ parts: [{ text: prompt }] }],
+                            contents: [{ role: 'user', parts: [{ text: prompt }] }],
                             generationConfig: {
                                 temperature: 1.05,
                                 responseMimeType: "application/json"
