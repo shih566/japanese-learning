@@ -1585,10 +1585,10 @@ ${avoidListStr}
 
             const customApiKey = (localStorage.getItem('wafu_custom_gemini_apikey') || '').trim();
             const apiKey = customApiKey || "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
             try {
-                const response = await fetchWithRetry(apiUrl, {
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1599,6 +1599,12 @@ ${avoidListStr}
                         }
                     })
                 });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    const errMsg = errData?.error?.message || `HTTP ${response.status}`;
+                    throw new Error(errMsg);
+                }
 
                 const data = await response.json();
                 const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -1625,14 +1631,15 @@ ${avoidListStr}
                 }));
 
                 if (isManualRefresh) {
-                    showToast(`✨ 已為您生成全新主題：「${lessonObj.topic}」！`, 'success');
+                    showToast(`✨ AI 已即時生成全新主題：「${lessonObj.topic}」！`, 'success');
                 }
             } catch (err) {
                 console.warn('AI 生成改用本地精選微場景題庫:', err);
                 const fallbackIdx = Math.floor(Math.random() * FALLBACK_AI_LESSONS.length);
                 appState.dailyLesson = FALLBACK_AI_LESSONS[fallbackIdx];
                 if (isManualRefresh) {
-                    showToast('已為您切換精選生活情境主題包！', 'info');
+                    const reason = !customApiKey ? '尚未設定 API 金鑰' : `API 連線異常 (${err.message})`;
+                    showToast(`${reason}，已切換本地精選題庫`, 'warning');
                 }
             } finally {
                 if (loadingEl) loadingEl.classList.add('hidden');
