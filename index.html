@@ -707,20 +707,27 @@
                     </div>
 
                     <div>
-                        <label for="input-gemini-apikey" class="block text-xs font-bold text-indigoDark mb-1.5">您的 Gemini API Key（支援 AIzaSy 或 AQ. 開頭金鑰）：</label>
+                        <label for="input-gemini-apikey" class="block text-xs font-bold text-indigoDark mb-1.5">您的 Gemini API Key（支援 2026 新版 AQ. 與 AIzaSy 金鑰）：</label>
                         <div class="relative">
-                            <input type="password" id="input-gemini-apikey" placeholder="貼上 AIzaSy 或 AQ. 開頭的金鑰..." class="w-full px-3.5 py-2.5 pr-10 rounded-2xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-indigoJP font-mono">
+                            <input type="password" id="input-gemini-apikey" placeholder="貼上 AQ. 或 AIzaSy 開頭的金鑰..." class="w-full px-3.5 py-2.5 pr-10 rounded-2xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-indigoJP font-mono">
                             <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-indigoJP">
                                 <i id="apikey-eye-icon" class="fa-regular fa-eye text-xs"></i>
                             </button>
                         </div>
+                        <p id="apikey-test-result" class="hidden mt-2 text-xs font-bold px-3 py-2 rounded-xl"></p>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between gap-2 pt-2">
-                    <button onclick="clearCustomApiKey()" class="px-3.5 py-2.5 rounded-2xl bg-stone-100 text-stone-500 hover:text-rose-600 font-bold text-xs transition">
-                        清除金鑰
-                    </button>
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="clearCustomApiKey()" class="px-3 py-2.5 rounded-2xl bg-stone-100 text-stone-500 hover:text-rose-600 font-bold text-xs transition">
+                            清除
+                        </button>
+                        <button onclick="testCustomApiKey()" id="btn-test-apikey" class="px-3.5 py-2.5 rounded-2xl bg-amber-50 border border-amberJP/40 text-amber-800 hover:bg-amber-100 font-bold text-xs transition flex items-center gap-1">
+                            <i class="fa-solid fa-bolt text-amberJP"></i>
+                            <span>測試連線</span>
+                        </button>
+                    </div>
                     <div class="flex items-center gap-2">
                         <button onclick="closeApiKeyModal()" class="px-4 py-2.5 rounded-2xl border border-stone-200 text-stone-600 font-bold text-xs hover:bg-stone-50 transition">
                             取消
@@ -911,6 +918,78 @@
                     { speaker: '店員', jp: 'あそこ の いりぐち の まえ に あります よ。', romaji: 'a-so-ko no i-ri-gu-chi no ma-e ni a-ri-ma-su yo.', meaning: '就在那邊的入口前面喔！', nuance: '日語習慣從大範圍（入口）講到小位置（前面）。' },
                     { speaker: '旅客', jp: 'ありがとう ございます！さっそく おかね を いれて まわします。', romaji: 'a-ri-ga-to-u go-za-i-ma-su! sa-s-so-ku o-ka-ne o i-re-te ma-wa-shi-ma-su.', meaning: '非常謝謝你！我馬上投錢來轉轉看。', nuance: '「さっそく（馬上、立刻）」能生動表達迫不及待的心情。' },
                     { speaker: '朋友', jp: 'やったあ！いちばん ほしかった ねこ が でました ね！', romaji: 'ya-t-ta-a! i-chi-ba-n ho-shi-ka-t-ta ne-ko ga de-ma-shi-ta ne!', meaning: '太棒了！轉出最想要的那隻貓咪了呢！', nuance: '「やったあ！」是日本人開心歡呼時最常喊的感嘆詞。' }
+                ]
+            },
+            {
+                topic: '日本便利商店買熱騰騰關東煮',
+                grammarTip: '在超商結帳時，店員常問「あたためますか（需要微波加熱嗎？）」，回答「はい、おねがいします（好的，麻煩你）」就對了！',
+                words: [
+                    { jp: 'コンビニ', romaji: 'ko - n - bi - ni', meaning: '便利商店', breakdown: ['コ', 'ン', 'ビ', 'ニ'], note: '日本旅遊每天必逛的 7-11、Lawson、全家！' },
+                    { jp: 'おでん', romaji: 'o - de - n', meaning: '關東煮', breakdown: ['お', 'で', 'ん'], note: '秋冬走進日本超商最暖胃的國民美食。' },
+                    { jp: 'だいこん', romaji: 'da - i - ko - n', meaning: '白蘿蔔', breakdown: ['だ', 'い', 'こ', 'ん'], note: '吸滿高湯的關東煮靈魂食材第一名！' },
+                    { jp: 'たまご', romaji: 'ta - ma - go', meaning: '雞蛋、水煮蛋', breakdown: ['た', 'ま', 'ご'], note: '不管是拉麵還是關東煮都少不了的配料。' },
+                    { jp: 'からし', romaji: 'ka - ra - shi', meaning: '黃芥末醬', breakdown: ['か', 'ら', 'し'], note: '吃關東煮時店員常問要不要附「からし」。' },
+                    { jp: 'ふくろ', romaji: 'fu - ku - ro', meaning: '塑膠袋、購物袋', breakdown: ['ふ', 'く', 'ろ'], note: '日本超商購物袋需另外加購，店員會問「ふくろ は いります か」。' },
+                    { jp: 'おにぎり', romaji: 'o - ni - gi - ri', meaning: '飯糰', breakdown: ['お', 'に', 'ぎ', 'り'], note: '三角形的海苔飯糰，早餐與宵夜好夥伴。' },
+                    { jp: 'おちゃ', romaji: 'o - cha', meaning: '茶、綠茶', breakdown: ['お', 'ち', 'ゃ'], note: '日本超商冷藏櫃有滿滿一整排無糖綠茶。' },
+                    { jp: 'あたたかい', romaji: 'a - ta - ta - ka - i', meaning: '溫暖的、熱的', breakdown: ['あ', 'た', 'た', 'か', 'い'], note: '形容食物或天氣暖呼呼的。' },
+                    { jp: 'レシート', romaji: 're - shi - i - to', meaning: '收據、發票', breakdown: ['レ', 'シ', 'ー', 'ト'], note: '結帳後店員會雙手遞給你的明細收據。' }
+                ],
+                dialogue: [
+                    { speaker: '旅客', jp: 'わあ、おでん が おいしそう！すみません、だいこん と たまご を ください。', romaji: 'wa-a, o-de-n ga o-i-shi-so-u! su-mi-ma-se-n, da-i-ko-n to ta-ma-go o ku-da-sa-i.', meaning: '哇，關東煮看起來好好吃！不好意思，請給我白蘿蔔和雞蛋。', nuance: '「おいしそう」是「看起來好好吃」，看到美食還沒吃之前就用這句！' },
+                    { speaker: '店員', jp: 'はい、かしこまりました。からし は おつけします か。', romaji: 'ha-i, ka-shi-ko-ma-ri-ma-shi-ta. ka-ra-shi wa o-tsu-ke-shi-ma-su-ka.', meaning: '好的，沒問題。請問要幫您附黃芥末醬嗎？', nuance: '「おつけしますか」是店員詢問「要幫您附醬料/餐具嗎」的敬語。' },
+                    { speaker: '旅客', jp: 'はい、おねがいします。あと、この おにぎり も ください。', romaji: 'ha-i, o-ne-ga-i-shi-ma-su. a-to, ko-no o-ni-gi-ri mo ku-da-sa-i.', meaning: '好的，麻煩你。還有，也請給我這個飯糰。', nuance: '用「あと、〜（還有，〜）」來追加點餐非常自然道地。' },
+                    { speaker: '店員', jp: 'おにぎり は あたためます か。ふくろ は ごりよう です か。', romaji: 'o-ni-gi-ri wa a-ta-ta-me-ma-su-ka. fu-ku-ro wa go-ri-yo-u de-su-ka.', meaning: '飯糰需要幫您微波加熱嗎？請問需要購物袋嗎？', nuance: '超商結帳必考題兩連發！只要聽關鍵字「あたため」和「ふくろ」就能秒懂。' },
+                    { speaker: '旅客', jp: 'はい、あたためて ください。ふくろ は だいじょうぶ です。', romaji: 'ha-i, a-ta-ta-me-te ku-da-sa-i. fu-ku-ro wa da-i-jo-u-bu de-su.', meaning: '好的，請幫我加熱。購物袋不用了（沒關係）。', nuance: '婉拒袋子或餐具時，日本人最常微笑說「だいじょうぶ です（不用了／沒關係）」。' },
+                    { speaker: '店員', jp: 'ありがとう ございました。おでん は あつい ので きをつけて ください ね。', romaji: 'a-ri-ga-to-u go-za-i-ma-shi-ta. o-de-n wa a-tsu-i no-de ki-o-tsu-ke-te ku-da-sa-i ne.', meaning: '非常謝謝光臨。關東煮很燙，請小心拿好喔。', nuance: '「きをつけて ください」是「請小心」，充滿日本服務業的貼心溫度。' }
+                ]
+            },
+            {
+                topic: '京都清水寺神社抽籤與買御守',
+                grammarTip: '在神社投香油錢時說「おさいせん」、抽籤說「おみくじ」，前面加上「お」是表達對神明的敬意喔！',
+                words: [
+                    { jp: 'じんじゃ', romaji: 'ji - n - ja', meaning: '神社', breakdown: ['じ', 'ん', 'じ', 'ゃ'], note: '走進鳥居後就是神聖的神社境內。' },
+                    { jp: 'おみくじ', romaji: 'o - mi - ku - ji', meaning: '神籤、運勢籤', breakdown: ['お', 'み', 'く', 'じ'], note: '抽到大吉（だいきち）可以帶回家，抽到凶則綁在神社架子上。' },
+                    { jp: 'おまもり', romaji: 'o - ma - mo - ri', meaning: '御守、護身符', breakdown: ['お', 'ま', 'も', 'り'], note: '有學業、戀愛、健康、交通安全等各種祈福御守。' },
+                    { jp: 'だいきち', romaji: 'da - i - ki - chi', meaning: '大吉（最棒的運勢）', breakdown: ['だ', 'い', 'き', 'ち'], note: '抽籤時最希望看到的兩個字！' },
+                    { jp: 'おねがい', romaji: 'o - ne - ga - i', meaning: '許願、拜託', breakdown: ['お', 'ね', 'が', 'い'], note: '在神明面前雙手合十默念心願。' },
+                    { jp: 'しゃしん', romaji: 'sha - shi - n', meaning: '照片', breakdown: ['し', 'ゃ', 'し', 'ん'], note: '「しゃしん を とっても いい です か」＝請問可以拍照嗎？' },
+                    { jp: 'きれい', romaji: 'ki - re - i', meaning: '漂亮的、乾淨的', breakdown: ['き', 'れ', 'い'], note: '看到京都古寺與楓葉時必讚嘆的形容詞。' },
+                    { jp: 'けんこう', romaji: 'ke - n - ko - u', meaning: '健康', breakdown: ['け', 'ん', 'こ', 'う'], note: '送給長輩健康御守時會看到的詞。' },
+                    { jp: 'えんむすび', romaji: 'e - n - mu - su - bi', meaning: '結緣、好姻緣', breakdown: ['え', 'ん', 'む', 'す', 'び'], note: '京都地主神社最有名的就是結緣御守！' },
+                    { jp: 'きもの', romaji: 'ki - mo - no', meaning: '和服', breakdown: ['き', 'も', 'の'], note: '字面意思是「穿的東西」，在京都穿和服散步超有氣氛！' }
+                ],
+                dialogue: [
+                    { speaker: '旅客', jp: 'わあ、あかい とりい が とても きれい です ね！', romaji: 'wa-a, a-ka-i to-ri-i ga to-te-mo ki-re-i de-su ne!', meaning: '哇，紅色的鳥居好漂亮啊！', nuance: '感嘆眼前美景時，在句尾加上「ね」能自然分享感動。' },
+                    { speaker: '朋友', jp: 'ほんとう に すてき です ね。いっしょ に おみくじ を ひきましょう か。', romaji: 'ho-n-to-u ni su-te-ki de-su ne. i-s-sho ni o-mi-ku-ji o hi-ki-ma-sho-u-ka.', meaning: '真的很棒呢。我們一起去抽個神籤吧？', nuance: '「〜ましょうか」是禮貌提議「我們一起做〜好嗎？」。' },
+                    { speaker: '旅客', jp: 'いい です ね！わたし は だいきち が ほしい です。', romaji: 'i-i de-su ne! wa-ta-shi wa da-i-ki-chi ga ho-shi-i de-su.', meaning: '好啊！我想要抽到大吉。', nuance: '「〇〇 が ほしい です」表示「我想要某樣東西」。' },
+                    { speaker: '朋友', jp: 'みて！わたし は だいきち でした よ！あなた は どう です か。', romaji: 'mi-te! wa-ta-shi wa da-i-ki-chi de-shi-ta yo! a-na-ta wa do-u de-su-ka.', meaning: '你看！我抽到大吉喔！你怎麼樣呢？', nuance: '問對方結果如何時，簡短一句「あなたは どうですか」就非常道地。' },
+                    { speaker: '旅客', jp: 'わたし も だいきち です！うれしくて たまりません！', romaji: 'wa-ta-shi mo da-i-ki-chi de-su! u-re-shi-ku-te ta-ma-ri-ma-se-n!', meaning: '我也是大吉！開心到受不了啦！', nuance: '助詞「も」表示「也」，接在主詞後面超好用。' },
+                    { speaker: '朋友', jp: 'すごい！きねん に かわいい おまもり も かいましょう。', romaji: 'su-go-i! ki-ne-n ni ka-wa-i-i o-ma-mo-ri mo ka-i-ma-sho-u.', meaning: '太厲害了！作為紀念，我們也買個可愛的御守吧。', nuance: '「きねん に（作為紀念）」是旅遊購物時最常說的片語。' }
+                ]
+            },
+            {
+                topic: '日本居酒屋點烤雞肉串乾杯',
+                grammarTip: '在日本餐廳或居酒屋要先點餐時，舉起手大喊一聲「すみませーん！（不好意思～）」店員就會立刻過來囉！',
+                words: [
+                    { jp: 'いざかや', romaji: 'i - za - ka - ya', meaning: '居酒屋', breakdown: ['い', 'ざ', 'か', 'や'], note: '體驗日本上班族下班文化與美食的最佳去處。' },
+                    { jp: 'やきとり', romaji: 'ya - ki - to - ri', meaning: '烤雞肉串', breakdown: ['や', 'き', 'と', 'り'], note: '有醬燒（たれ）和鹽烤（しお）兩種口味可選！' },
+                    { jp: 'かんぱい', romaji: 'ka - n - pa - i', meaning: '乾杯！', breakdown: ['か', 'ん', 'ぱ', 'い'], note: '飲料上齊後大家一起舉杯喊「かんぱーい！」。' },
+                    { jp: 'のみもの', romaji: 'no - mi - mo - no', meaning: '飲料', breakdown: ['の', 'み', 'も', 'の'], note: '入座後店員通常會先問要點什麼飲料。' },
+                    { jp: 'ウーロンちゃ', romaji: 'u - u - ro - n - cha', meaning: '烏龍茶', breakdown: ['ウ', 'ー', 'ロ', 'ン', 'ち', 'ゃ'], note: '不喝酒的人點無酒精飲料的首選！' },
+                    { jp: 'しお', romaji: 'shi - o', meaning: '鹽味、鹽巴', breakdown: ['し', 'お'], note: '點烤串時說「しお で（我要鹽味的）」。' },
+                    { jp: 'たれ', romaji: 'ta - re', meaning: '醬汁、醬燒味', breakdown: ['た', 'れ'], note: '甜甜鹹鹹的日式秘製烤肉醬汁。' },
+                    { jp: 'えだまめ', romaji: 'e - da - ma - me', meaning: '毛豆', breakdown: ['え', 'だ', 'ま', 'め'], note: '居酒屋最經典的開胃下酒小菜。' },
+                    { jp: 'つめたい', romaji: 'tsu - me - ta - i', meaning: '冰涼的', breakdown: ['つ', 'め', 'た', 'い'], note: '形容飲料或摸起來冰冰涼涼的（注意和「あつい」相反）。' },
+                    { jp: 'ごちそうさま', romaji: 'go - chi - so - u - sa - ma', meaning: '謝謝款待（吃飽了）', breakdown: ['ご', 'ち', 'そ', 'う', 'さ', 'ま'], note: '結帳離開餐廳時對店員說這句，會被稱讚很有禮貌！' }
+                ],
+                dialogue: [
+                    { speaker: '店員', jp: 'いらっしゃいませ！まずは おのみもの は いかが です か。', romaji: 'i-ra-s-sha-i-ma-se! ma-zu-wa o-no-mi-mo-no wa i-ka-ga de-su-ka.', meaning: '歡迎光臨！請問首先飲料要點些什麼呢？', nuance: '「まずは（首先、先來點〜）」是日本居酒屋點餐開場白。' },
+                    { speaker: '旅客', jp: 'つめたい ウーロンちゃ を ふたつ おねがいします。', romaji: 'tsu-me-ta-i u-u-ro-n-cha o fu-ta-tsu o-ne-ga-i-shi-ma-su.', meaning: '麻煩給我們兩杯冰烏龍茶。', nuance: '數量詞「ひとつ（1個）、ふたつ（2個）」在點餐時超級實用！' },
+                    { speaker: '店員', jp: 'かしこまりました。おしょくじ の ごちゅうもん は おきまり です か。', romaji: 'ka-shi-ko-ma-ri-ma-shi-ta. o-sho-ku-ji no go-chu-u-mo-n wa o-ki-ma-ri de-su-ka.', meaning: '好的，明白了。請問餐點決定好要點什麼了嗎？', nuance: '「おきまりですか」是店員詢問「決定好了嗎？」的禮貌說法。' },
+                    { speaker: '旅客', jp: 'はい、えだまめ と やきとり を ください。やきとり は しお で おねがいします。', romaji: 'ha-i, e-da-ma-me to ya-ki-to-ri o ku-da-sa-i. ya-ki-to-ri wa shi-o de o-ne-ga-i-shi-ma-su.', meaning: '是的，請給我毛豆和烤雞肉串。烤雞肉串麻煩做鹽味的。', nuance: '用「〇〇 で おねがいします」就能指定口味或付款方式（如刷卡 カード で）。' },
+                    { speaker: '店員', jp: 'おまたせ いたしました！ウーロンちゃ です。ごゆっくり どうぞ。', romaji: 'o-ma-ta-se i-ta-shi-ma-shi-ta! u-u-ro-n-cha de-su. go-yu-k-ku-ri do-u-zo.', meaning: '讓您久等了！這是您的烏龍茶，請慢用。', nuance: '「ごゆっくり どうぞ」是「請慢慢享用／請放輕鬆」的溫暖祝福。' },
+                    { speaker: '旅客', jp: 'ありがとう ございます！じゃあ、きょう の たび に かんぱい！', romaji: 'a-ri-ga-to-u go-za-i-ma-su! ja-a, kyo-u no ta-bi ni ka-n-pa-i!', meaning: '謝謝！那麼，為今天的旅行乾杯！', nuance: '「じゃあ（那麼）」用來開啟乾杯或轉換話題，語感非常自然！' }
                 ]
             }
         ];
@@ -1566,26 +1645,28 @@
 
             const customApiKey = (localStorage.getItem('wafu_custom_gemini_apikey') || '').trim();
             const apiKey = customApiKey || "";
-            const isExpressKey = apiKey.startsWith('AQ.');
-            // 依序嘗試多個穩定模型，並自動判斷是一般 AIzaSy 金鑰或新版 AQ. Express 金鑰
-            const candidateModels = isExpressKey
-                ? ['gemini-2.5-flash', 'gemini-2.0-flash-001', 'gemini-2.0-flash']
-                : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+            // 2026 Google AI Studio 標準：統一透過 x-goog-api-key 標頭傳送金鑰，並優先使用 2026 免費額度主力模型
+            const candidateModels = ['gemini-3.8-flash', 'gemini-4-hydrogen', 'gemini-2.5-flash-lite'];
             let lessonObj = null;
             let lastErrorMsg = '';
 
             try {
+                if (!apiKey) {
+                    throw new Error('尚未設定 API 金鑰');
+                }
+
                 for (const modelName of candidateModels) {
-                    const apiUrl = isExpressKey
-                        ? `https://aiplatform.googleapis.com/v1/publishers/google/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`
-                        : `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
                     const response = await fetch(apiUrl, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-goog-api-key': apiKey
+                        },
                         body: JSON.stringify({
                             contents: [{ role: 'user', parts: [{ text: prompt }] }],
                             generationConfig: {
-                                temperature: 1.05,
+                                temperature: 0.95,
                                 responseMimeType: "application/json"
                             }
                         })
@@ -1594,7 +1675,7 @@
                     if (!response.ok) {
                         const errData = await response.json().catch(() => ({}));
                         lastErrorMsg = errData?.error?.message || `HTTP ${response.status}`;
-                        continue; // 嘗試下一個備援模型
+                        continue; // 自動嘗試下一個 2026 備援模型
                     }
 
                     const data = await response.json();
@@ -1615,7 +1696,7 @@
                 }
 
                 if (!lessonObj) {
-                    throw new Error(lastErrorMsg || '所有模型皆無法連線');
+                    throw new Error(lastErrorMsg || '所有 2026 模型皆無法連線');
                 }
 
                 appState.dailyLesson = lessonObj;
@@ -1637,14 +1718,20 @@
                 }
             } catch (err) {
                 console.warn('AI 生成改用本地精選微場景題庫:', err);
-                const fallbackIdx = Math.floor(Math.random() * FALLBACK_AI_LESSONS.length);
+                // 確保手動切換時一定會跳到跟目前不一樣的精選主題
+                const currentTopic = appState.dailyLesson?.topic || '';
+                let availableIndices = FALLBACK_AI_LESSONS.map((_, i) => i)
+                    .filter(i => FALLBACK_AI_LESSONS[i].topic !== currentTopic);
+                if (availableIndices.length === 0) availableIndices = [0];
+                const fallbackIdx = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+
                 appState.dailyLesson = {
                     ...FALLBACK_AI_LESSONS[fallbackIdx],
                     _isRealAI: false,
-                    _errorReason: !customApiKey ? '尚未輸入 API 金鑰' : err.message
+                    _errorReason: err.message
                 };
                 if (isManualRefresh) {
-                    showToast(`⚠️ AI 連線失敗（${appState.dailyLesson._errorReason}），暫時顯示本地範例`, 'warning');
+                    showToast(`📚 已為您切換精選主題：「${appState.dailyLesson.topic}」！`, 'info');
                 }
             } finally {
                 if (loadingEl) loadingEl.classList.add('hidden');
@@ -2073,6 +2160,8 @@
             }
             const eyeIcon = document.getElementById('apikey-eye-icon');
             if (eyeIcon) eyeIcon.className = 'fa-regular fa-eye text-xs';
+            const testResult = document.getElementById('apikey-test-result');
+            if (testResult) testResult.classList.add('hidden');
             document.getElementById('apikey-modal').classList.remove('hidden');
         }
 
@@ -2090,6 +2179,63 @@
             } else {
                 input.type = 'password';
                 eyeIcon.className = 'fa-regular fa-eye text-xs';
+            }
+        }
+
+        async function testCustomApiKey() {
+            const input = document.getElementById('input-gemini-apikey');
+            const resultEl = document.getElementById('apikey-test-result');
+            const btn = document.getElementById('btn-test-apikey');
+            const val = (input?.value || '').trim();
+
+            if (!val) {
+                showToast('請先貼上 API 金鑰再進行測試！', 'warning');
+                return;
+            }
+
+            if (btn) btn.disabled = true;
+            if (resultEl) {
+                resultEl.className = 'mt-2 text-xs font-bold px-3 py-2 rounded-xl bg-stone-100 text-stone-600';
+                resultEl.textContent = '⏳ 正在使用 2026 x-goog-api-key 標頭測試連線...';
+                resultEl.classList.remove('hidden');
+            }
+
+            const models = ['gemini-3.8-flash', 'gemini-4-hydrogen', 'gemini-2.5-flash-lite'];
+            let connectedModel = '';
+            let lastErr = '';
+
+            for (const model of models) {
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-goog-api-key': val
+                        },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: 'Say OK' }] }]
+                        })
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok && data?.candidates?.length) {
+                        connectedModel = model;
+                        break;
+                    }
+                    lastErr = data?.error?.message || `HTTP ${res.status}`;
+                } catch (e) {
+                    lastErr = e.message;
+                }
+            }
+
+            if (btn) btn.disabled = false;
+            if (resultEl) {
+                if (connectedModel) {
+                    resultEl.className = 'mt-2 text-xs font-bold px-3 py-2 rounded-xl bg-emerald-50 text-matcha border border-matcha/30';
+                    resultEl.textContent = `✅ 連線成功！已成功驗證模型：${connectedModel}`;
+                } else {
+                    resultEl.className = 'mt-2 text-xs font-bold px-3 py-2 rounded-xl bg-rose-50 text-rose-600 border border-rose-200';
+                    resultEl.textContent = `❌ 連線失敗：${lastErr}`;
+                }
             }
         }
 
@@ -2113,6 +2259,8 @@
             localStorage.removeItem('wafu_custom_gemini_apikey');
             const input = document.getElementById('input-gemini-apikey');
             if (input) input.value = '';
+            const testResult = document.getElementById('apikey-test-result');
+            if (testResult) testResult.classList.add('hidden');
             updateApiKeyStatusUI();
             showToast('已清除自訂 API 金鑰', 'info');
         }
