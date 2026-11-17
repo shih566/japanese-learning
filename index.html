@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日語初學記憶網站 | 零基礎日語學習的記憶輔助專家</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts: Noto Sans TC 與 Noto Sans JP 確保日文與繁體中文顯示優美 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 引入 FontAwesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        washi: '#FAF8F5',      // 和紙米白背景
+                        indigoJP: '#2B4C7E',   // 日本傳統靛藍
+                        indigoDark: '#1D3557', // 深靛藍
+                        sakura: '#F2A6B3',     // 櫻花粉
+                        sakuraLight: '#FDF2F4',// 淺櫻花底色
+                        matcha: '#6B9080',     // 抹茶綠（答對/已掌握）
+                        amberJP: '#E09F3E',    // 琥珀黃（模糊/重點）
+                        ink: '#2D3142',        // 墨黑文字
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Noto Sans JP"', 'sans-serif'],
+                        jp: ['"Noto Sans JP"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 自定義和風細節與 3D 翻牌動畫 */
+        body {
+            background-color: #FAF8F5;
+            background-image: radial-gradient(#E5E0D8 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: #2D3142;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 3D 翻轉卡片容器 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* 按鈕微互動效果 */
+        .btn-bounce:active {
+            transform: scale(0.96);
+        }
+
+        /* 自定義捲軸 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* 動畫效果 */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(8px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop {
+            animation: popIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-sakura selection:text-white">
+
+    <!-- 頂部導覽列 -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-stone-200/80 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 gap-3">
+                <!-- Logo 與標題 -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3 cursor-pointer group" onclick="switchTab('practice')">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#375E97] to-indigoDark text-white flex items-center justify-center shadow-md shadow-indigoJP/25 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
+                            <svg viewBox="0 0 64 64" class="w-9 h-9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- 聲波線條 -->
+                                <path d="M18 18H23L26 13L30 23L34 10L38 20L41 18H46" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- 閃耀星芒 -->
+                                <path d="M14 13L15 15.5L17.5 16.5L15 17.5L14 20L13 17.5L10.5 16.5L13 15.5Z" fill="white"/>
+                                <path d="M50 15L50.8 17L52.8 17.8L50.8 18.6L50 20.6L49.2 18.6L47.2 17.8L49.2 17Z" fill="white"/>
+                                <circle cx="21" cy="11" r="1.2" fill="white"/>
+                                <!-- 書本底層頁緣 -->
+                                <path d="M10 29V49C10 50.5 11.2 51.5 12.7 51.5H29.5L32 53L34.5 51.5H51.3C52.8 51.5 54 50.5 54 49V29" stroke="#CBD5E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <!-- 書本左頁 -->
+                                <path d="M13 26.5C19 25 26 26.5 32 30V49.5C26 46.5 19 45.5 13 47V26.5Z" fill="white"/>
+                                <!-- 書本右頁 -->
+                                <path d="M51 26.5C45 25 38 26.5 32 30V49.5C38 46.5 45 45.5 51 47V26.5Z" fill="white"/>
+                                <!-- 書本中線裝訂環 -->
+                                <path d="M30.5 33.5C31.5 33 32.5 33 33.5 33.5M30.5 38C31.5 37.5 32.5 37.5 33.5 38M30.5 42.5C31.5 42 32.5 42 33.5 42.5M30.5 47C31.5 46.5 32.5 46.5 33.5 47" stroke="#2B4C7E" stroke-width="1.8" stroke-linecap="round"/>
+                                <!-- 左頁「あ」與右頁「い」 -->
+                                <text x="22" y="41.5" text-anchor="middle" fill="#2B4C7E" font-size="11.5" font-weight="900" font-family="'Noto Sans JP', sans-serif">あ</text>
+                                <text x="42" y="41.5" text-anchor="middle" fill="#2B4C7E" font-size="11.5" font-weight="900" font-family="'Noto Sans JP', sans-serif">い</text>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-lg sm:text-xl font-black text-indigoDark tracking-tight leading-none">日語初學記憶網站</h1>
+                            <p class="text-[11px] sm:text-xs text-stone-500 mt-1 font-medium">零基礎日語學習的記憶輔助專家</p>
+                        </div>
+                    </div>
+
+                    <!-- 語音狀態指示與快速進度 (手機版顯示) -->
+                    <div class="flex sm:hidden items-center gap-2">
+                        <span id="mobile-mastery-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-sakuraLight text-indigoJP border border-sakura/40">
+                            已掌握 0/46
+                        </span>
+                        <button onclick="openApiKeyModal()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-600 hover:text-indigoJP flex items-center justify-center border border-stone-200/80" title="API 金鑰設定">
+                            <i class="fa-solid fa-key text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 模組切換導覽按鈕與 API 金鑰設定 -->
+                <div class="flex items-center gap-2">
+                    <nav class="flex-1 flex items-center bg-stone-100/90 p-1 rounded-2xl border border-stone-200/60 overflow-x-auto">
+                        <button onclick="switchTab('chart')" id="nav-chart" class="nav-btn flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap text-stone-600 hover:text-indigoJP">
+                            <i class="fa-solid fa-table-cells text-xs"></i>
+                            <span>五十音總覽</span>
+                        </button>
+                        <button onclick="switchTab('practice')" id="nav-practice" class="nav-btn flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap bg-indigoJP text-white shadow-sm">
+                            <i class="fa-solid fa-brain text-xs"></i>
+                            <span>反覆記憶練習</span>
+                            <span id="nav-star-count" class="ml-0.5 px-1.5 py-0.2 text-[11px] rounded-full bg-sakura text-indigoDark font-extrabold">0</span>
+                        </button>
+                        <button onclick="switchTab('vocab')" id="nav-vocab" class="nav-btn flex-1 sm:flex-none px-3.5 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap text-stone-600 hover:text-indigoJP">
+                            <i class="fa-solid fa-wand-magic-sparkles text-xs text-amberJP"></i>
+                            <span>AI 每日新單字與會話</span>
+                        </button>
+                    </nav>
+
+                    <button onclick="openApiKeyModal()" id="desktop-apikey-btn" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-stone-100 hover:bg-indigoJP/10 text-stone-600 hover:text-indigoJP border border-stone-200/80 text-xs font-bold transition shrink-0" title="設定 Gemini API 金鑰">
+                        <i class="fa-solid fa-key text-amberJP"></i>
+                        <span id="apikey-status-label">API 設定</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 全域提示訊息列 (取代 alert) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 left-5 sm:left-auto z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- 語音不支援警告橫幅 (預設隱藏，偵測不支援時顯示) -->
+    <div id="speech-warning" class="hidden bg-amber-50 border-b border-amber-200 text-amber-800 px-4 py-2 text-xs text-center">
+        <i class="fa-solid fa-volume-xmark mr-1"></i> 您的瀏覽器目前不支援日語語音合成 (Web Speech API)，建議使用 Chrome、Edge 或 Safari 瀏覽器以獲得完整發音體驗。
+    </div>
+
+    <!-- 主內容區 -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6">
+
+        <!-- =========================================================
+             模組一：五十音總覽與發音聯想表
+             ========================================================= -->
+        <section id="section-chart" class="hidden animate-pop">
+            <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-6 bg-indigoJP rounded-full inline-block"></span>
+                            <h2 class="text-xl font-bold text-indigoDark">五十音清音總覽表 (46音)</h2>
+                        </div>
+                        <p class="text-sm text-stone-500 mt-1">點擊任意假名即可聆聽標準日語發音，並查看零基礎聯想記憶口訣。</p>
+                    </div>
+
+                    <!-- 平假名 / 片假名 / 雙排顯示切換 -->
+                    <div class="inline-flex rounded-2xl bg-stone-100 p-1 border border-stone-200/70 self-start">
+                        <button onclick="setChartDisplay('hiragana')" id="btn-chart-hira" class="chart-mode-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-indigoJP shadow-sm transition">
+                            平假名 (あ)
+                        </button>
+                        <button onclick="setChartDisplay('katakana')" id="btn-chart-kata" class="chart-mode-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-stone-600 hover:text-indigoJP transition">
+                            片假名 (ア)
+                        </button>
+                        <button onclick="setChartDisplay('both')" id="btn-chart-both" class="chart-mode-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-stone-600 hover:text-indigoJP transition">
+                            平片對照
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 五十音網格表 (佔 2 欄) -->
+                <div class="lg:col-span-2 bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-stone-200/80">
+                    <!-- 母音表頭 a i u e o -->
+                    <div class="grid grid-cols-5 gap-2 mb-3 text-center">
+                        <span class="text-xs font-extrabold text-indigoJP bg-indigoJP/5 py-1.5 rounded-xl">a 段</span>
+                        <span class="text-xs font-extrabold text-indigoJP bg-indigoJP/5 py-1.5 rounded-xl">i 段</span>
+                        <span class="text-xs font-extrabold text-indigoJP bg-indigoJP/5 py-1.5 rounded-xl">u 段</span>
+                        <span class="text-xs font-extrabold text-indigoJP bg-indigoJP/5 py-1.5 rounded-xl">e 段</span>
+                        <span class="text-xs font-extrabold text-indigoJP bg-indigoJP/5 py-1.5 rounded-xl">o 段</span>
+                    </div>
+                    <div id="kana-chart-grid" class="grid grid-cols-5 gap-2 sm:gap-2.5">
+                        <!-- 由 JS 動態生成 46 音格子 -->
+                    </div>
+                </div>
+
+                <!-- 單音聯想詳情卡片 (佔 1 欄) -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-stone-200/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span id="detail-row-tag" class="text-xs font-bold px-3 py-1 rounded-full bg-indigoJP/10 text-indigoJP">あ行</span>
+                            <button onclick="toggleCurrentDetailStar()" id="detail-star-btn" class="w-9 h-9 rounded-full bg-stone-100 text-stone-400 hover:text-amberJP flex items-center justify-center transition">
+                                <i class="fa-regular fa-star"></i>
+                            </button>
+                        </div>
+
+                        <div class="text-center py-4 bg-washi rounded-2xl border border-stone-200/60 mb-5">
+                            <div class="flex items-center justify-center gap-6">
+                                <div>
+                                    <p class="text-[11px] text-stone-400 font-bold mb-1">平假名</p>
+                                    <p id="detail-hira" class="font-jp text-5xl font-black text-indigoDark">あ</p>
+                                </div>
+                                <div class="w-px h-12 bg-stone-200"></div>
+                                <div>
+                                    <p class="text-[11px] text-stone-400 font-bold mb-1">片假名</p>
+                                    <p id="detail-kata" class="font-jp text-5xl font-black text-indigoJP">ア</p>
+                                </div>
+                            </div>
+                            <p id="detail-romaji" class="text-lg font-extrabold text-sakura mt-3 tracking-widest">a</p>
+                        </div>
+
+                        <div class="bg-sakuraLight/60 rounded-2xl p-4 border border-sakura/30">
+                            <h4 class="text-xs font-extrabold text-indigoDark flex items-center gap-1.5 mb-1.5">
+                                <i class="fa-solid fa-lightbulb text-amberJP"></i>
+                                <span>零基礎聯想記憶口訣</span>
+                            </h4>
+                            <p id="detail-mnemonic" class="text-xs sm:text-sm text-stone-700 leading-relaxed">
+                                平假名「あ」像一個人在跳舞大喊「啊(a)」；片假名「ア」像一個人的側臉張嘴喊「啊」。
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onclick="speakCurrentDetail()" class="mt-6 w-full py-3.5 rounded-2xl bg-indigoJP text-white font-bold text-sm shadow-md shadow-indigoJP/20 hover:bg-indigoDark transition btn-bounce flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>再聽一次發音</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             模組二：五十音反覆記憶練習（核心間隔重複訓練）
+             ========================================================= -->
+        <section id="section-practice" class="animate-pop">
+            <!-- 學習進度儀表板 -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-6 bg-sakura rounded-full inline-block"></span>
+                            <h2 class="text-xl font-bold text-indigoDark">五十音反覆背誦與間隔記憶</h2>
+                        </div>
+                        <p class="text-sm text-stone-500 mt-1">透過翻牌間隔重複、聽音辨字與錯題特訓，將短期記憶轉化為永久反射！</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="bg-emerald-50 border border-matcha/30 px-3.5 py-2 rounded-2xl text-center">
+                            <p class="text-[11px] font-bold text-matcha">已掌握進度</p>
+                            <p id="stat-mastered" class="text-base font-black text-indigoDark">0 / 46</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amberJP/30 px-3.5 py-2 rounded-2xl text-center">
+                            <p class="text-[11px] font-bold text-amber-700">連續答對</p>
+                            <p id="stat-combo" class="text-base font-black text-indigoDark">0 題</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 進度條 -->
+                <div class="w-full h-2.5 bg-stone-100 rounded-full overflow-hidden mb-5">
+                    <div id="mastery-progress-bar" class="h-full bg-gradient-to-r from-indigoJP to-matcha transition-all duration-500" style="width: 0%"></div>
+                </div>
+
+                <!-- 三大練習模式切換 -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <button onclick="setPracticeMode('flashcard')" id="pmode-flashcard" class="pmode-btn p-3 rounded-2xl border-2 border-indigoJP bg-indigoJP/5 text-left transition flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigoJP text-white flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-extrabold text-indigoDark">模式 A：翻牌間隔記憶</p>
+                            <p class="text-[11px] text-stone-500">忘記的音 2 題後立即重現</p>
+                        </div>
+                    </button>
+
+                    <button onclick="setPracticeMode('quiz')" id="pmode-quiz" class="pmode-btn p-3 rounded-2xl border-2 border-stone-200 bg-white hover:border-indigoJP/40 text-left transition flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sakuraLight text-indigoJP flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-headphones"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-extrabold text-indigoDark">模式 B：看音／聽音辨字</p>
+                            <p class="text-[11px] text-stone-500">主動回憶測驗強化反應力</p>
+                        </div>
+                    </button>
+
+                    <button onclick="setPracticeMode('weakness')" id="pmode-weakness" class="pmode-btn p-3 rounded-2xl border-2 border-stone-200 bg-white hover:border-indigoJP/40 text-left transition flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amberJP flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-extrabold text-indigoDark">模式 C：不熟／錯題特訓</p>
+                            <p class="text-[11px] text-stone-500">針對重點標記假名高強度特訓</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 模式 A：3D 翻牌間隔重複容器 -->
+            <div id="practice-flashcard-container" class="max-w-lg mx-auto">
+                <!-- 範圍篩選與字體切換 -->
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 px-1">
+                    <select id="fc-scope-select" onchange="resetPracticeQueue()" class="bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs font-bold text-stone-700 focus:outline-none focus:border-indigoJP">
+                        <option value="all">範圍：全部 46 音</option>
+                        <option value="unmastered">範圍：僅練習尚未掌握的音</option>
+                        <option value="row-a">範圍：あ行 (a i u e o)</option>
+                        <option value="row-ka">範圍：か行 (ka ki ku ke ko)</option>
+                        <option value="row-sa">範圍：さ行 (sa shi su se so)</option>
+                        <option value="row-ta">範圍：た行 (ta chi tsu te to)</option>
+                        <option value="row-na">範圍：な行 (na ni nu ne no)</option>
+                    </select>
+
+                    <div class="inline-flex rounded-xl bg-white p-1 border border-stone-200">
+                        <button onclick="setFlashcardScript('hiragana')" id="fc-script-hira" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigoJP text-white transition">平假名</button>
+                        <button onclick="setFlashcardScript('katakana')" id="fc-script-kata" class="px-2.5 py-1 rounded-lg text-xs font-bold text-stone-600 transition">片假名</button>
+                    </div>
+                </div>
+
+                <!-- 3D 翻轉卡片本體 -->
+                <div class="perspective-1000 h-80 sm:h-88 w-full cursor-pointer mb-5" onclick="flipFlashcard()">
+                    <div id="flashcard-inner" class="flip-card-inner shadow-lg rounded-3xl">
+                        <!-- 卡片正面 -->
+                        <div class="flip-card-front bg-white border-2 border-stone-200/80 p-6 flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <span id="fc-front-row" class="text-xs font-bold px-3 py-1 rounded-full bg-indigoJP/10 text-indigoJP">あ行</span>
+                                <button onclick="event.stopPropagation(); toggleCurrentFlashcardStar()" id="fc-star-btn" class="w-9 h-9 rounded-full bg-stone-100 text-stone-400 hover:text-amberJP flex items-center justify-center transition" title="加入重點特訓">
+                                    <i class="fa-regular fa-star"></i>
+                                </button>
+                            </div>
+
+                            <div class="text-center my-auto">
+                                <p id="fc-front-kana" class="font-jp text-8xl sm:text-9xl font-black text-indigoDark select-none">あ</p>
+                                <p class="text-xs text-stone-400 mt-4 flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-hand-pointer text-sakura"></i>
+                                    <span>先在心中念出讀音，再點擊卡片翻面確認</span>
+                                </p>
+                            </div>
+
+                            <div class="text-center">
+                                <span id="fc-queue-badge" class="text-[11px] font-bold text-stone-400">待複習佇列：46 張</span>
+                            </div>
+                        </div>
+
+                        <!-- 卡片背面 -->
+                        <div class="flip-card-back bg-gradient-to-br from-indigoDark to-indigoJP text-white p-6 flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-white/15 text-sakura">答案與記憶口訣</span>
+                                <button onclick="event.stopPropagation(); speakCurrentFlashcard()" class="w-10 h-10 rounded-full bg-white/15 hover:bg-sakura text-white flex items-center justify-center transition">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+
+                            <div class="text-center my-auto">
+                                <div class="flex items-center justify-center gap-4">
+                                    <span id="fc-back-hira" class="font-jp text-5xl font-black">あ</span>
+                                    <span class="text-white/30 text-2xl">/</span>
+                                    <span id="fc-back-kata" class="font-jp text-5xl font-black text-sakura">ア</span>
+                                </div>
+                                <p id="fc-back-romaji" class="text-3xl font-black text-amberJP mt-2 tracking-wider">a</p>
+                                <p id="fc-back-mnemonic" class="text-xs sm:text-sm text-indigo-100 mt-4 bg-white/10 p-3.5 rounded-2xl leading-relaxed text-left">
+                                    平假名「あ」像一個人在跳舞大喊「啊(a)」
+                                </p>
+                            </div>
+
+                            <p class="text-[11px] text-center text-indigo-200">請根據記憶程度選擇下方按鈕安排下次複習 👇</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 間隔重複回饋按鈕列 -->
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="rateFlashcard('forgot')" class="btn-bounce py-3.5 px-2 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs sm:text-sm flex flex-col items-center gap-1 transition">
+                        <span class="text-base">😵 完全忘記</span>
+                        <span class="text-[10px] opacity-80">2 題後馬上重考</span>
+                    </button>
+                    <button onclick="rateFlashcard('fuzzy')" class="btn-bounce py-3.5 px-2 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-800 hover:bg-amber-100 font-bold text-xs sm:text-sm flex flex-col items-center gap-1 transition">
+                        <span class="text-base">🤔 有點猶豫</span>
+                        <span class="text-[10px] opacity-80">6 題後再次複習</span>
+                    </button>
+                    <button onclick="rateFlashcard('mastered')" class="btn-bounce py-3.5 px-2 rounded-2xl bg-emerald-50 border-2 border-matcha/40 text-matcha hover:bg-emerald-100 font-bold text-xs sm:text-sm flex flex-col items-center gap-1 transition">
+                        <span class="text-base">🎉 秒答記住了</span>
+                        <span class="text-[10px] opacity-80">標記為已掌握</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 模式 B & C：選擇題測驗與錯題特訓容器 -->
+            <div id="practice-quiz-container" class="hidden max-w-lg mx-auto">
+                <!-- 模式 B 子題型選擇器 -->
+                <div id="quiz-subtype-bar" class="flex justify-center gap-2 mb-4">
+                    <button onclick="setQuizSubtype('romaji-to-kana')" id="qsub-romaji-to-kana" class="qsub-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-indigoJP text-white transition">看拼音選假名</button>
+                    <button onclick="setQuizSubtype('audio-to-kana')" id="qsub-audio-to-kana" class="qsub-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-stone-200 text-stone-600 transition">聽發音選假名</button>
+                    <button onclick="setQuizSubtype('kana-to-romaji')" id="qsub-kana-to-romaji" class="qsub-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-stone-200 text-stone-600 transition">看假名選拼音</button>
+                </div>
+
+                <!-- 錯題特訓空狀態提示 -->
+                <div id="weakness-empty-state" class="hidden bg-white rounded-3xl p-8 text-center border border-stone-200/80 shadow-sm">
+                    <div class="w-16 h-16 rounded-full bg-emerald-50 text-matcha flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-medal"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-indigoDark">目前沒有待特訓的錯題假名！</h3>
+                    <p class="text-xs text-stone-500 mt-1.5">當您在測驗答錯，或在卡片右上角點擊「★」標記不熟的假名時，就會自動出現在這裡進行強化特訓。</p>
+                    <button onclick="setPracticeMode('flashcard')" class="mt-5 px-5 py-2.5 rounded-2xl bg-indigoJP text-white font-bold text-xs">
+                        返回翻牌練習
+                    </button>
+                </div>
+
+                <!-- 測驗題目卡片 -->
+                <div id="quiz-card-box" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/80 text-center">
+                    <div class="flex items-center justify-between mb-4">
+                        <span id="quiz-mode-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-sakuraLight text-indigoJP">主動回憶測驗</span>
+                        <span id="quiz-streak-info" class="text-xs font-bold text-amberJP"></span>
+                    </div>
+
+                    <div id="quiz-prompt-area" class="py-6">
+                        <p id="quiz-instruction" class="text-xs font-bold text-stone-400 mb-2">請選出對應的平假名</p>
+                        <div id="quiz-question-display" class="font-jp text-6xl sm:text-7xl font-black text-indigoDark">a</div>
+                        <button onclick="replayQuizAudio()" id="quiz-audio-btn" class="mt-3 px-4 py-2 rounded-full bg-indigoJP/10 text-indigoJP hover:bg-indigoJP hover:text-white text-xs font-bold inline-flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>播放提示音</span>
+                        </button>
+                    </div>
+
+                    <!-- 4 個選項按鈕 -->
+                    <div id="quiz-options-grid" class="grid grid-cols-2 gap-3 mt-2">
+                        <!-- 由 JS 動態生成 -->
+                    </div>
+
+                    <!-- 答題回饋與口訣提示 -->
+                    <div id="quiz-feedback-box" class="hidden mt-5 p-4 rounded-2xl bg-stone-50 border border-stone-200 text-left">
+                        <p id="quiz-feedback-title" class="text-sm font-extrabold mb-1"></p>
+                        <p id="quiz-feedback-mnemonic" class="text-xs text-stone-600 leading-relaxed"></p>
+                        <button onclick="setupQuizQuestion()" class="mt-3 w-full py-2.5 rounded-xl bg-indigoJP text-white font-bold text-xs hover:bg-indigoDark transition">
+                            下一題 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             模組三：AI 每日新單字與情境會話 (AI Daily Generator)
+             ========================================================= -->
+        <section id="section-vocab" class="hidden animate-pop">
+            <!-- AI 每日課程控制面板 -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80 mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="w-2 h-6 bg-matcha rounded-full inline-block"></span>
+                            <h2 class="text-xl font-bold text-indigoDark">AI 每日新單字與情境會話</h2>
+                            <span id="ai-daily-date-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-sakuraLight text-indigoJP border border-sakura/30">
+                                今日課程
+                            </span>
+                        </div>
+                        <p class="text-sm text-stone-500 mt-1">每天打開自動為您生成全新零基礎主題單字與實用會話，也可隨時手動換一組主題練習！</p>
+                    </div>
+
+                    <!-- 主題選擇與 AI 生成按鈕 -->
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <select id="ai-theme-select" class="bg-stone-50 border border-stone-200 rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-stone-700 focus:outline-none focus:border-indigoJP">
+                            <option value="隨機驚喜微場景">主題：🎲 隨機驚喜生活場景</option>
+                            <option value="日本旅遊與餐廳點餐">主題：🍜 日本旅遊與美食點餐</option>
+                            <option value="日本便利商店與藥妝購物">主題：🏪 超商與藥妝店購物</option>
+                            <option value="車站交通、問路與住宿">主題：🚃 車站交通與旅館住宿</option>
+                            <option value="動漫、追星與興趣交友">主題：🎌 動漫、興趣與自我介紹</option>
+                            <option value="日本四季祭典與神社文化">主題：⛩️ 四季祭典與神社祈福</option>
+                        </select>
+
+                        <button onclick="generateDailyAILesson(true)" id="btn-generate-ai" class="btn-bounce px-4 py-2.5 rounded-2xl bg-gradient-to-r from-indigoJP to-indigoDark text-white font-bold text-xs sm:text-sm shadow-md shadow-indigoJP/20 hover:opacity-95 flex items-center gap-2 transition">
+                            <i class="fa-solid fa-wand-magic-sparkles text-sakura"></i>
+                            <span>生成全新主題與單字</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 視圖切換列：今日 AI 課程 / 我的單字收藏本 / 基礎入門精選 -->
+                <div class="mt-5 pt-4 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3">
+                    <div class="inline-flex rounded-2xl bg-stone-100 p-1 border border-stone-200/70">
+                        <button onclick="switchVocabSubtab('ai-daily')" id="vsub-ai-daily" class="vsub-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-indigoJP shadow-sm transition">
+                            ✨ 今日 AI 主題課
+                        </button>
+                        <button onclick="switchVocabSubtab('saved')" id="vsub-saved" class="vsub-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-stone-600 hover:text-indigoJP transition flex items-center gap-1.5">
+                            <span>⭐ 我的單字收藏本</span>
+                            <span id="saved-vocab-count" class="px-1.5 py-0.2 rounded-full bg-amberJP/20 text-amber-700 text-[11px] font-extrabold">0</span>
+                        </button>
+                        <button onclick="switchVocabSubtab('starter')" id="vsub-starter" class="vsub-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-stone-600 hover:text-indigoJP transition">
+                            📖 零基礎必學精選
+                        </button>
+                    </div>
+
+                    <!-- 今日新單字小測驗啟動按鈕 -->
+                    <button onclick="openDailyMiniQuiz()" id="btn-daily-quiz" class="px-4 py-2 rounded-xl bg-matcha/15 text-matcha hover:bg-matcha hover:text-white border border-matcha/30 font-bold text-xs flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>今日新單字隨堂小測驗</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 子分頁 1：今日 AI 動態生成課程 -->
+            <div id="vocab-view-ai-daily">
+                <!-- AI 載入動畫狀態 -->
+                <div id="ai-loading-state" class="hidden bg-white rounded-3xl p-10 text-center border border-stone-200/80 shadow-sm mb-6">
+                    <div class="w-16 h-16 rounded-full bg-sakuraLight text-indigoJP flex items-center justify-center text-3xl mx-auto mb-4 animate-bounce">
+                        🌸
+                    </div>
+                    <h3 class="text-lg font-extrabold text-indigoDark">AI 日語老師正在為您編寫今日課程...</h3>
+                    <p class="text-xs text-stone-500 mt-1.5">根據您的五十音學習進度，挑選最適合零基礎拼讀的單字與會話</p>
+                </div>
+
+                <!-- AI 課程內容容器 -->
+                <div id="ai-lesson-content">
+                    <!-- 主題橫幅與學習重點提示 -->
+                    <div class="bg-gradient-to-r from-indigoDark to-indigoJP text-white rounded-3xl p-5 sm:p-6 shadow-md mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/15 text-sakura">
+                                TODAY'S AI LESSON
+                            </span>
+                            <h3 id="ai-lesson-topic" class="text-xl sm:text-2xl font-black mt-2">載入中...</h3>
+                            <p id="ai-lesson-tip" class="text-xs sm:text-sm text-indigo-100 mt-1.5 leading-relaxed"></p>
+                        </div>
+                        <div class="shrink-0 bg-white/10 backdrop-blur-sm rounded-2xl p-3.5 border border-white/15 text-xs">
+                            <p class="text-indigo-200">已掌握五十音參考</p>
+                            <p id="ai-lesson-level-tag" class="font-bold text-white mt-0.5">零基礎純假名拼讀模式</p>
+                        </div>
+                    </div>
+
+                    <!-- 今日 10 個 AI 新單字網格 -->
+                    <h4 class="text-base font-extrabold text-indigoDark mb-3 flex items-center gap-2 px-1">
+                        <i class="fa-solid fa-book-open text-sakura"></i>
+                        <span>今日精選 10 個新單字（點擊喇叭聽發音、點擊星號收藏）</span>
+                    </h4>
+                    <div id="ai-words-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                        <!-- 由 JS 動態渲染 AI 生成單字 -->
+                    </div>
+
+                    <!-- 今日完整情境小對話實戰（語感培養模式） -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 px-1">
+                        <h4 class="text-base font-extrabold text-indigoDark flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-matcha"></i>
+                            <span>今日完整情境小對話（沉浸式培養語感）</span>
+                        </h4>
+
+                        <!-- 語感訓練控制工具列 -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="playFullDialogue()" id="btn-play-all-dialogue" class="btn-bounce px-3.5 py-1.5 rounded-xl bg-matcha text-white font-bold text-xs shadow-sm hover:opacity-95 flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-play"></i>
+                                <span>連續朗讀整段對話</span>
+                            </button>
+                            <button onclick="toggleDialogueMask('jp')" id="btn-mask-jp" class="px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:border-indigoJP font-bold text-xs flex items-center gap-1.5 transition" title="隱藏日文純練聽力">
+                                <i class="fa-solid fa-ear-listen text-indigoJP"></i>
+                                <span>盲聽練語感</span>
+                            </button>
+                            <button onclick="toggleDialogueMask('zh')" id="btn-mask-zh" class="px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-stone-600 hover:border-indigoJP font-bold text-xs flex items-center gap-1.5 transition" title="隱藏中文測試理解度">
+                                <i class="fa-solid fa-eye-slash text-amberJP"></i>
+                                <span>遮住中文</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="ai-dialogue-list" class="bg-white/70 rounded-3xl p-4 sm:p-5 border border-stone-200/80 space-y-3.5 mb-6">
+                        <!-- 由 JS 動態渲染完整情境對話氣泡 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 子分頁 2：我的單字收藏本 -->
+            <div id="vocab-view-saved" class="hidden">
+                <div id="saved-empty-state" class="hidden bg-white rounded-3xl p-10 text-center border border-stone-200/80 shadow-sm">
+                    <div class="w-16 h-16 rounded-full bg-amber-50 text-amberJP flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-indigoDark">您的單字收藏本目前是空的</h3>
+                    <p class="text-xs text-stone-500 mt-1.5">在「今日 AI 主題課」中點擊單字卡片右上角的星星，即可把喜歡的單字永久存到這裡複習！</p>
+                </div>
+                <div id="saved-words-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 由 JS 動態渲染收藏單字 -->
+                </div>
+            </div>
+
+            <!-- 子分頁 3：零基礎必學精選 (保留原有經典單字庫) -->
+            <div id="vocab-view-starter" class="hidden">
+                <div id="vocab-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 由 JS 動態渲染 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             今日 AI 新單字隨堂小測驗彈窗 (Modal)
+             ========================================================= -->
+        <div id="daily-quiz-modal" class="hidden fixed inset-0 z-50 bg-indigoDark/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-stone-200 animate-pop">
+                <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                    <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-matcha/15 text-matcha">
+                        📝 今日新單字隨堂測驗
+                    </span>
+                    <button onclick="closeDailyMiniQuiz()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 hover:text-rose-500 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div id="dq-body" class="py-5 text-center">
+                    <p id="dq-progress" class="text-xs font-bold text-stone-400 mb-2">第 1 / 5 題</p>
+                    <div class="flex items-center justify-center gap-2 my-3">
+                        <h3 id="dq-word-jp" class="font-jp text-4xl font-black text-indigoDark">すし</h3>
+                        <button onclick="speakDailyQuizWord()" class="w-9 h-9 rounded-full bg-sakuraLight text-indigoJP hover:bg-sakura hover:text-white flex items-center justify-center">
+                            <i class="fa-solid fa-volume-high text-xs"></i>
+                        </button>
+                    </div>
+                    <p id="dq-word-romaji" class="text-xs font-bold text-indigoJP mb-5">su - shi</p>
+
+                    <div id="dq-options" class="space-y-2.5 text-left">
+                        <!-- 動態選項 -->
+                    </div>
+                </div>
+
+                <div id="dq-result" class="hidden py-6 text-center">
+                    <div class="w-16 h-16 rounded-full bg-matcha/15 text-matcha flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-indigoDark">今日單字測驗完成！</h3>
+                    <p id="dq-score-text" class="text-sm text-stone-600 mt-1.5">您答對了 5 / 5 題！</p>
+                    <button onclick="closeDailyMiniQuiz()" class="mt-5 w-full py-3 rounded-2xl bg-indigoJP text-white font-bold text-sm hover:bg-indigoDark transition">
+                        太棒了，繼續學習
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             Gemini API 金鑰設定彈窗 (Modal)
+             ========================================================= -->
+        <div id="apikey-modal" class="hidden fixed inset-0 z-50 bg-indigoDark/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-stone-200 animate-pop">
+                <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-amber-50 text-amberJP flex items-center justify-center">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <h3 class="text-base font-extrabold text-indigoDark">Gemini API 金鑰設定</h3>
+                    </div>
+                    <button onclick="closeApiKeyModal()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 hover:text-rose-500 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="py-4 space-y-3">
+                    <p class="text-xs text-stone-600 leading-relaxed">
+                        將網站部署到外部空間（如 GitHub Pages、Netlify）後，填入您自己的免費 <strong>Gemini API Key</strong>，即可無限生成每日新單字與情境會話！
+                    </p>
+                    <div class="bg-washi p-3 rounded-2xl border border-stone-200/70 text-xs text-stone-600 space-y-1">
+                        <p class="font-bold text-indigoDark">如何免費取得金鑰？</p>
+                        <p>1. 前往 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="text-indigoJP underline font-bold">Google AI Studio</a> 登入 Google 帳號</p>
+                        <p>2. 點擊「Create API key」並複製貼入下方欄位</p>
+                    </div>
+
+                    <div>
+                        <label for="input-gemini-apikey" class="block text-xs font-bold text-indigoDark mb-1.5">您的 Gemini API Key（僅保存在您的瀏覽器本機）：</label>
+                        <div class="relative">
+                            <input type="password" id="input-gemini-apikey" placeholder="貼上 AIzaSy 開頭的金鑰..." class="w-full px-3.5 py-2.5 pr-10 rounded-2xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-indigoJP font-mono">
+                            <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-indigoJP">
+                                <i id="apikey-eye-icon" class="fa-regular fa-eye text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2">
+                    <button onclick="clearCustomApiKey()" class="px-3.5 py-2.5 rounded-2xl bg-stone-100 text-stone-500 hover:text-rose-600 font-bold text-xs transition">
+                        清除金鑰
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="closeApiKeyModal()" class="px-4 py-2.5 rounded-2xl border border-stone-200 text-stone-600 font-bold text-xs hover:bg-stone-50 transition">
+                            取消
+                        </button>
+                        <button onclick="saveCustomApiKey()" class="px-5 py-2.5 rounded-2xl bg-indigoJP text-white font-bold text-xs hover:bg-indigoDark shadow-md shadow-indigoJP/20 transition">
+                            儲存並立即啟用
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="mt-auto py-6 text-center text-xs text-stone-400 border-t border-stone-200/60 bg-white/50">
+        <p>日語初學記憶網站 ｜ 零基礎日語學習的記憶輔助專家</p>
+        <button onclick="resetAllProgress()" class="mt-2 text-stone-400 hover:text-rose-500 underline transition">重置所有學習進度</button>
+    </footer>
+
+    <!-- =========================================================
+         JavaScript 核心資料與互動邏輯
+         ========================================================= -->
+    <script>
+        // 1. 完整 46 個清音資料庫（含平假名、片假名、羅馬拼音、行段、聯想記憶口訣）
+        const KANA_DATA = [
+            // あ行
+            { id: 'a', hira: 'あ', kata: 'ア', romaji: 'a', row: 'あ行', col: 0, mnemonic: '平假名「あ」像一個人在跳舞大喊「啊(a)」；片假名「ア」像一個人的側臉張嘴喊「啊」。' },
+            { id: 'i', hira: 'い', kata: 'イ', romaji: 'i', row: 'あ行', col: 1, mnemonic: '平假名「い」像兩個人並肩站著，英文的 i 也是兩筆；片假名「イ」像單人旁「亻」，讀音「衣(i)」。' },
+            { id: 'u', hira: 'う', kata: 'ウ', romaji: 'u', row: 'あ行', col: 2, mnemonic: '平假名「う」像一個人彎腰被踢到肚子發出「嗚(u)」的聲音；片假名「ウ」像寶蓋頭「宀」，屋(u)頂。' },
+            { id: 'e', hira: 'え', kata: 'エ', romaji: 'e', row: 'あ行', col: 3, mnemonic: '平假名「え」像漢字「元」的草書，看到一元硬幣驚訝「欸(e)」；片假名「エ」像工人的「工」。' },
+            { id: 'o', hira: 'お', kata: 'オ', romaji: 'o', row: 'あ行', col: 4, mnemonic: '平假名「お」像一個人肚子大大的喊「喔(o)」；片假名「オ」像才子的「才」，喔(o)原來是才子！' },
+            // か行
+            { id: 'ka', hira: 'か', kata: 'カ', romaji: 'ka', row: 'か行', col: 0, mnemonic: '平假名「か」就是「力」加一點，用力「卡(ka)」住；片假名「カ」直接就是「力」字！' },
+            { id: 'ki', hira: 'き', kata: 'キ', romaji: 'ki', row: 'か行', col: 1, mnemonic: '平假名「き」與片假名「キ」都像一把古老的鑰匙 (Key)，英文發音就是「ki」！' },
+            { id: 'ku', hira: 'く', kata: 'ク', romaji: 'ku', row: 'か行', col: 2, mnemonic: '平假名「く」像一張嘴巴在「哭(ku)」；片假名「ク」像「久」字少一捺，哭(ku)了好久。' },
+            { id: 'ke', hira: 'け', kata: 'ケ', romaji: 'ke', row: 'か行', col: 3, mnemonic: '平假名「け」像「計」的草書；片假名「ケ」像竹子的一半，砍竹子發出「ke」聲。' },
+            { id: 'ko', hira: 'こ', kata: 'コ', romaji: 'ko', row: 'か行', col: 4, mnemonic: '平假名「こ」像兩條線上下呼應（口）；片假名「コ」像方形的「口」少左邊，都念「ko」。' },
+            // さ行
+            { id: 'sa', hira: 'さ', kata: 'サ', romaji: 'sa', row: 'さ行', col: 0, mnemonic: '平假名「さ」像「殺」的草書；片假名「サ」像草字頭「艹」，在草地上撒(sa)種子。' },
+            { id: 'shi', hira: 'し', kata: 'シ', romaji: 'shi', row: 'さ行', col: 1, mnemonic: '平假名「し」像一根吸管 (shi)；片假名「シ」像三點水「氵」，吸(shi)水。' },
+            { id: 'su', hira: 'す', kata: 'ス', romaji: 'su', row: 'さ行', col: 2, mnemonic: '平假名「す」像一根筷子捲起麵條，發出「蘇(su)～蘇～」吸麵聲；片假名「ス」像人跑步速度(su)很快。' },
+            { id: 'se', hira: 'せ', kata: 'セ', romaji: 'se', row: 'さ行', col: 3, mnemonic: '平假名「せ」與片假名「セ」都來自漢字「世」，世界的「世(se)」！' },
+            { id: 'so', hira: 'そ', kata: 'ソ', romaji: 'so', row: 'さ行', col: 4, mnemonic: '平假名「そ」像縫衣針一針一線縫(so)衣服；片假名「ソ」像兩根針插在布上。' },
+            // た行
+            { id: 'ta', hira: 'た', kata: 'タ', romaji: 'ta', row: 'た行', col: 0, mnemonic: '平假名「た」就是「太」的草書，念「ta」；片假名「タ」像夕陽的「夕」，夕(ta)陽真美。' },
+            { id: 'chi', hira: 'ち', kata: 'チ', romaji: 'chi', row: 'た行', col: 1, mnemonic: '平假名「ち」像數字「5」，片假名「チ」像「千」，五千「七(chi)」百！' },
+            { id: 'tsu', hira: 'つ', kata: 'ツ', romaji: 'tsu', row: 'た行', col: 2, mnemonic: '平假名「つ」像海嘯的大海浪 (Tsunami)；片假名「ツ」像海浪濺起的三滴水花。' },
+            { id: 'te', hira: 'て', kata: 'テ', romaji: 'te', row: 'た行', col: 3, mnemonic: '平假名「て」像一隻手掌伸出來；片假名「テ」像「天」字變形，手(te)指著天空。' },
+            { id: 'to', hira: 'と', kata: 'ト', romaji: 'to', row: 'た行', col: 4, mnemonic: '平假名「と」像一根紅蘿蔔插在地上；片假名「ト」就是蘿蔔的「卜(to)」！' },
+            // な行
+            { id: 'na', hira: 'な', kata: 'ナ', romaji: 'na', row: 'な行', col: 0, mnemonic: '平假名「な」來自「奈」的草書；片假名「ナ」像「奈」的左上角，無奈(na)啊！' },
+            { id: 'ni', hira: 'に', kata: 'ニ', romaji: 'ni', row: 'な行', col: 1, mnemonic: '平假名「に」來自「仁」的草書；片假名「ニ」直接就是數字「二(ni)」！' },
+            { id: 'nu', hira: 'ぬ', kata: 'ヌ', romaji: 'nu', row: 'な行', col: 2, mnemonic: '平假名「ぬ」來自「奴」的草書，最後打一個結；片假名「ヌ」就是「奴」的右半邊「又」。' },
+            { id: 'ne', hira: 'ね', kata: 'ネ', romaji: 'ne', row: 'な行', col: 3, mnemonic: '平假名「ね」像一隻貓咪捲著尾巴睡覺 (neko)；片假名「ネ」像示字旁「礻」。' },
+            { id: 'no', hira: 'の', kata: 'ノ', romaji: 'no', row: 'な行', col: 4, mnemonic: '平假名「の」就是「乃」的草書，畫一個圓圈說「No」；片假名「ノ」就是「乃」的第一撇！' },
+            // は行
+            { id: 'ha', hira: 'は', kata: 'ハ', romaji: 'ha', row: 'は行', col: 0, mnemonic: '平假名「は」像一個人張大嘴「哈(ha)哈」大笑；片假名「ハ」就是「八」，八(ha)個人在笑。' },
+            { id: 'hi', hira: 'ひ', kata: 'ヒ', romaji: 'hi', row: 'は行', col: 1, mnemonic: '平假名「ひ」像一張微笑的嘴巴「嘻(hi)嘻」笑；片假名「ヒ」像一把匕首的「匕(hi)」。' },
+            { id: 'fu', hira: 'ふ', kata: 'フ', romaji: 'fu', row: 'は行', col: 2, mnemonic: '平假名「ふ」像富士山噴發的樣子 (Fuji)；片假名「フ」像富士山山頂的一角。' },
+            { id: 'he', hira: 'へ', kata: 'ヘ', romaji: 'he', row: 'は行', col: 3, mnemonic: '平假名「へ」與片假名「ヘ」長得一模一樣！都像一座小山坡，爬山「嘿(he)咻嘿咻」。' },
+            { id: 'ho', hira: 'ほ', kata: 'ホ', romaji: 'ho', row: 'は行', col: 4, mnemonic: '平假名「ほ」比「は」多一橫，戴著帽子笑「呵(ho)呵」；片假名「ホ」像「木」字，木頭人呵(ho)呵笑。' },
+            // ま行
+            { id: 'ma', hira: 'ま', kata: 'マ', romaji: 'ma', row: 'ま行', col: 0, mnemonic: '平假名「ま」來自「末」的草書；片假名「マ」像媽媽(ma)抱著小孩的手臂。' },
+            { id: 'mi', hira: 'み', kata: 'ミ', romaji: 'mi', row: 'ま行', col: 1, mnemonic: '平假名「み」像數字「21」，21歲就是「mi」；片假名「ミ」像三撇「彡」，貓咪(mi)的三根鬍鬚。' },
+            { id: 'mu', hira: 'む', kata: 'ム', romaji: 'mu', row: 'ま行', col: 2, mnemonic: '平假名「む」像一頭牛在叫「哞(mu)～」，尾巴還翹起來；片假名「ム」像牛鼻子。' },
+            { id: 'me', hira: 'め', kata: 'メ', romaji: 'me', row: 'ま行', col: 3, mnemonic: '平假名「め」來自「女」的草書（眼睛 me）；片假名「メ」像一個叉叉「×」，眼睛(me)看花打叉叉。' },
+            { id: 'mo', hira: 'も', kata: 'モ', romaji: 'mo', row: 'ま行', col: 4, mnemonic: '平假名「も」與片假名「モ」都來自漢字「毛」，毛茸茸的「毛(mo)」！' },
+            // や行 (只有3音)
+            { id: 'ya', hira: 'や', kata: 'ヤ', romaji: 'ya', row: 'や行', col: 0, mnemonic: '平假名「や」與片假名「ヤ」都來自「也」，呀(ya)！原來是你也來了！' },
+            { id: 'yu', hira: 'ゆ', kata: 'ユ', romaji: 'yu', row: 'や行', col: 2, mnemonic: '平假名「ゆ」像一條熱帶魚在游泳 (yu)；片假名「ユ」像潛水艇的潛望鏡。' },
+            { id: 'yo', hira: 'よ', kata: 'ヨ', romaji: 'yo', row: 'や行', col: 4, mnemonic: '平假名「よ」像在跳「溜溜球 (Yo-yo)」；片假名「ヨ」像側過來的「E」，Yo！' },
+            // ら行
+            { id: 'ra', hira: 'ら', kata: 'ラ', romaji: 'ra', row: 'ら行', col: 0, mnemonic: '平假名「ら」像一個人蹲在馬桶上「拉(ra)」肚子；片假名「ラ」像馬桶蓋掀起來。' },
+            { id: 'ri', hira: 'り', kata: 'リ', romaji: 'ri', row: 'ら行', col: 1, mnemonic: '平假名「り」與片假名「リ」都來自「利」的立刀旁「刂」，鋒利(ri)的刀！' },
+            { id: 'ru', hira: 'る', kata: 'ル', romaji: 'ru', row: 'ら行', col: 2, mnemonic: '平假名「る」像數字「3」捲起尾巴；片假名「ル」像兒子的「儿」，抱著兒子(ru)。' },
+            { id: 're', hira: 'れ', kata: 'レ', romaji: 're', row: 'ら行', col: 3, mnemonic: '平假名「れ」像一個人累(re)到跪在地上；片假名「レ」像打勾「✓」，累(re)完了打個勾。' },
+            { id: 'ro', hira: 'ろ', kata: 'ロ', romaji: 'ro', row: 'ら行', col: 4, mnemonic: '平假名「ろ」像數字「3」沒有捲尾巴；片假名「ロ」就是四方形的「口」，念「ro」。' },
+            // わ行 + 撥音ん
+            { id: 'wa', hira: 'わ', kata: 'ワ', romaji: 'wa', row: 'わ行', col: 0, mnemonic: '平假名「わ」像一只青蛙鼓起肚子「哇(wa)」叫；片假名「ワ」像青蛙張大嘴巴。' },
+            { id: 'wo', hira: 'を', kata: 'ヲ', romaji: 'wo (o)', row: 'わ行', col: 4, mnemonic: '專用作助詞的「を」，發音同「お (o)」。平假名像一個人跳起來喊「喔(o)」！' },
+            { id: 'n', hira: 'ん', kata: 'ン', romaji: 'n', row: '撥音', col: 0, mnemonic: '平假名「ん」長得就像英文字母小寫的「n」，鼻音「嗯(n)」！片假名「ン」像兩點水「冫」。' }
+        ];
+
+        // 2. 零基礎單字與日常會話資料庫
+        const VOCAB_DATA = [
+            { type: 'word', jp: 'あい', romaji: 'a - i', meaning: '愛、愛情', breakdown: ['あ (a)', 'い (i)'], tip: '由最開頭的兩個母音組成，超好記！' },
+            { type: 'word', jp: 'いぬ', romaji: 'i - nu', meaning: '狗狗', breakdown: ['い (i)', 'ぬ (nu)'], tip: '日本柴犬的「犬」就是念いぬ。' },
+            { type: 'word', jp: 'ねこ', romaji: 'ne - ko', meaning: '貓咪', breakdown: ['ね (ne)', 'こ (ko)'], tip: '喜歡貓咪必學的第一個單字！' },
+            { type: 'word', jp: 'すし', romaji: 'su - shi', meaning: '壽司', breakdown: ['す (su)', 'し (shi)'], tip: '跟英文 Sushi 發音完全一樣。' },
+            { type: 'word', jp: 'みず', romaji: 'mi - zu', meaning: '水', breakdown: ['み (mi)', 'ず (zu)'], tip: '「ず」是「す」加上兩點濁音。' },
+            { type: 'word', jp: 'やま', romaji: 'ya - ma', meaning: '山', breakdown: ['や (ya)', 'ま (ma)'], tip: '富士山 (Fuji-yama) 的山就是它。' },
+            { type: 'word', jp: 'さくら', romaji: 'sa - ku - ra', meaning: '櫻花', breakdown: ['さ (sa)', 'く (ku)', 'ら (ra)'], tip: '三個音都是最基礎的清音，試著拼拼看！' },
+            { type: 'word', jp: 'かわいい', romaji: 'ka - wa - i - i', meaning: '可愛的', breakdown: ['か (ka)', 'わ (wa)', 'い (i)', 'い (i)'], tip: '最後有兩個「い」，記得拉長音喔！' },
+            { type: 'phrase', jp: 'おはよう', romaji: 'o - ha - yo - u', meaning: '早安（對朋友/家人）', breakdown: ['お', 'は', 'よ', 'う'], tip: '正式場合加上「ございます」變成 おはようございます。' },
+            { type: 'phrase', jp: 'こんにちは', romaji: 'ko - n - ni - chi - wa', meaning: '你好（白天見面）', breakdown: ['こ', 'ん', 'に', 'ち', 'は'], tip: '注意最後的「は」當助詞時要念成「wa」！' },
+            { type: 'phrase', jp: 'ありがとう', romaji: 'a - ri - ga - to - u', meaning: '謝謝', breakdown: ['あ', 'り', 'が', 'と', 'う'], tip: '最溫暖的感謝語，加上 ございます 更禮貌。' },
+            { type: 'phrase', jp: 'すみません', romaji: 'su - mi - ma - se - n', meaning: '不好意思 / 請問 / 對不起', breakdown: ['す', 'み', 'ま', 'せ', 'ん'], tip: '去日本旅遊最萬用的一句話，點餐借過都能用！' },
+            { type: 'phrase', jp: 'さようなら', romaji: 'sa - yo - u - na - ra', meaning: '再見', breakdown: ['さ', 'よ', 'う', 'な', 'ら'], tip: '較正式的道別，朋友之間常說 じゃあね。' },
+            { type: 'phrase', jp: 'おいしい', romaji: 'o - i - shi - i', meaning: '好吃！美味！', breakdown: ['お', 'い', 'し', 'い'], tip: '吃到美食時一定要大聲說出來的單字！' }
+        ];
+
+        // 3. 應用程式狀態管理 (支援 LocalStorage 持久化保存學習進度)
+        let appState = {
+            masteredIds: [],      // 已完全掌握的假名 ID 陣列
+            starredIds: [],       // 標記星號（不熟/重點）的假名 ID 陣列
+            combo: 0,             // 連續答對次數
+            reviewedCount: 0,     // 累計練習次數
+            chartDisplay: 'hiragana', // 'hiragana' | 'katakana' | 'both'
+            selectedDetailId: 'a',
+            practiceMode: 'flashcard', // 'flashcard' | 'quiz' | 'weakness'
+            quizSubtype: 'romaji-to-kana', // 'romaji-to-kana' | 'audio-to-kana' | 'kana-to-romaji'
+            flashcardQueue: [],   // 間隔重複演算法佇列
+            flashcardScript: 'hiragana', // 'hiragana' | 'katakana'
+            isFlipped: false,
+            currentQuizItem: null,
+            quizAnswered: false,
+            weaknessStreak: {},    // 記錄特訓模式中每個假名的連對次數 (連對2次畢業)
+            dailyLesson: null,     // 今日 AI 生成的課程資料
+            savedVocab: [],        // 使用者收藏的 AI 單字陣列
+            seenAIWords: [],       // 記錄所有曾經生成過的 AI 單字，避免重複出現
+            vocabSubtab: 'ai-daily',
+            dailyQuizState: { questions: [], index: 0, score: 0, answered: false },
+            dialogueMaskJp: false, // 盲聽模式（隱藏日文與拼音）
+            dialogueMaskZh: false, // 理解測試模式（隱藏中文）
+            isPlayingFullDialogue: false
+        };
+
+        // 豐富的多樣化微場景抽籤池（每次隨機抽取不同切角，避免 AI 總寫出一樣的內容）
+        const CREATIVE_MICRO_SCENARIOS = [
+            '在東京下北澤的復古咖啡廳點手沖咖啡與布丁',
+            '在京都清水寺附近的神社抽籤與買御守',
+            '在日本居酒屋點烤雞肉串與無酒精飲料',
+            '在秋葉原轉扭蛋機並與店員換零錢',
+            '在北海道滑雪場或溫泉旅館辦理入住手續',
+            '在奈良公園買鹿仙貝餵小鹿',
+            '在日本便利商店買熱騰騰的關東煮與炸雞',
+            '在東京車站尋找新幹線月台與買鐵路便當',
+            '在原宿可麗餅店挑選喜歡的甜點口味',
+            '在下雨天走進日本藥妝店買透明雨傘與面膜'
+        ];
+
+        // 備援精選主題課程庫（當網路或 API 暫時無法連線時自動隨機切換，含 10 單字與完整起承轉合小對話）
+        const FALLBACK_AI_LESSONS = [
+            {
+                topic: '東京下北澤復古咖啡廳點餐',
+                grammarTip: '點餐時只要說「〇〇 を ください」(請給我〇〇)，句尾加上「ね」或「よ」會讓日語聽起來更親切自然！',
+                words: [
+                    { jp: 'プリン', romaji: 'pu - ri - n', meaning: '布丁', breakdown: ['プ', 'リ', 'ン'], note: '日本昭和復古咖啡廳必點的硬布丁！' },
+                    { jp: 'コーヒー', romaji: 'ko - o - hi - i', meaning: '咖啡', breakdown: ['コ', 'ー', 'ヒ', 'ー'], note: '長音符號「ー」代表把前面母音拉長一拍。' },
+                    { jp: 'あまい', romaji: 'a - ma - i', meaning: '甜的', breakdown: ['あ', 'ま', 'い'], note: '形容甜點好吃時最常用的い形容詞。' },
+                    { jp: 'メニュー', romaji: 'me - nyu - u', meaning: '菜單', breakdown: ['メ', 'ニ', 'ュ', 'ー'], note: '來自英文 Menu 的外來語片假名。' },
+                    { jp: 'おかいけい', romaji: 'o - ka - i - ke - i', meaning: '結帳', breakdown: ['お', 'か', 'い', 'け', 'い'], note: '吃完飯向店員比個交叉手勢或說這句就能買單。' },
+                    { jp: 'アイス', romaji: 'a - i - su', meaning: '冰的／冰淇淋', breakdown: ['ア', 'イ', 'ス'], note: '點冰咖啡時常說「アイス コーヒー」。' },
+                    { jp: 'ホット', romaji: 'ho - t - to', meaning: '熱的', breakdown: ['ホ', 'ッ', 'ト'], note: '中間的小「ッ」是促音，要停頓一拍再念「to」。' },
+                    { jp: 'ケーキ', romaji: 'ke - e - ki', meaning: '蛋糕', breakdown: ['ケ', 'ー', 'キ'], note: '下午茶搭配咖啡的人氣甜點。' },
+                    { jp: 'せき', romaji: 'se - ki', meaning: '座位', breakdown: ['せ', 'き'], note: '進店時店員常問有沒有空位（あいている せき）。' },
+                    { jp: 'おいしい', romaji: 'o - i - shi - i', meaning: '好吃的、美味的', breakdown: ['お', 'い', 'し', 'い'], note: '稱讚料理或甜點好吃最直接的表達！' }
+                ],
+                dialogue: [
+                    { speaker: '店員', jp: 'いらっしゃいませ！なんめいさま です か。', romaji: 'i-ra-s-sha-i-ma-se! na-n-me-i-sa-ma de-su-ka.', meaning: '歡迎光臨！請問幾位呢？', nuance: '「いらっしゃいませ」是進店必聽招呼語，客人不需要回覆這句喔。' },
+                    { speaker: '旅客', jp: 'ひとり です。まどぎわ の せき は ありますか。', romaji: 'hi-to-ri de-su. ma-do-gi-wa no se-ki wa a-ri-ma-su-ka.', meaning: '一位。請問有靠窗的座位嗎？', nuance: '用「〇〇 は ありますか」禮貌詢問店家有沒有某樣東西或座位。' },
+                    { speaker: '店員', jp: 'はい、こちら へ どうぞ。メニュー です。', romaji: 'ha-i, ko-chi-ra e do-u-zo. me-nyu-u de-su.', meaning: '好的，請往這邊走。這是菜單。', nuance: '「どうぞ」表示「請」，是日語中最溫暖常用的引導詞。' },
+                    { speaker: '旅客', jp: 'ありがとう ございます。えっと、プリン と アイス コーヒー を ください。', romaji: 'a-ri-ga-to-u go-za-i-ma-su. e-t-to, pu-ri-n to a-i-su ko-o-hi-i o ku-da-sa-i.', meaning: '非常謝謝。那個……請給我一份布丁和一杯冰咖啡。', nuance: '思考要點什麼時說「えっと…（那個…）」，能瞬間展現道地日語語感！' },
+                    { speaker: '店員', jp: 'かしこまりました。プリン は とても にんき です よ。', romaji: 'ka-shi-ko-ma-ri-ma-shi-ta. pu-ri-n wa to-te-mo ni-n-ki de-su yo.', meaning: '好的，我明白了。我們的布丁非常受歡迎喔！', nuance: '句尾加「よ」帶有熱情向對方推薦、告知新資訊的語氣。' },
+                    { speaker: '旅客', jp: 'わあ、たのしみ です！', romaji: 'wa-a, ta-no-shi-mi de-su!', meaning: '哇，好期待啊！', nuance: '自然流露期待的心情，能讓日本店員感到非常開心。' }
+                ]
+            },
+            {
+                topic: '秋葉原扭蛋機尋寶大作戰',
+                grammarTip: '日語對話中常使用「そうですね（我想想看）」和「すごい！（好厲害！）」來承接話題，讓對話自然不冷場。',
+                words: [
+                    { jp: 'ガチャガチャ', romaji: 'ga - cha - ga - cha', meaning: '扭蛋機', breakdown: ['ガ', 'チ', 'ャ', 'ガ', 'チ', 'ャ'], note: '模擬轉動扭蛋旋鈕發出的「喀嚓喀嚓」聲。' },
+                    { jp: 'おかね', romaji: 'o - ka - ne', meaning: '錢、零錢', breakdown: ['お', 'か', 'ね'], note: '在「かね（金）」前面加上「お」會更有禮貌。' },
+                    { jp: 'りょうがえ', romaji: 'ryo - u - ga - e', meaning: '換零錢', breakdown: ['り', 'ょ', 'う', 'が', 'え'], note: '日本扭蛋機旁常寫著「両替機」就是換幣機！' },
+                    { jp: 'かわいい', romaji: 'ka - wa - i - i', meaning: '可愛的', breakdown: ['か', 'わ', 'い', 'い'], note: '轉到喜歡的小公仔時必喊的感嘆詞！' },
+                    { jp: 'さがす', romaji: 'sa - ga - su', meaning: '尋找', breakdown: ['さ', 'が', 'す'], note: '動詞原形，找尋心儀機台時會用到。' },
+                    { jp: 'コイン', romaji: 'ko - i - n', meaning: '硬幣', breakdown: ['コ', 'イ', 'ン'], note: '投幣時常用的外來語單字。' },
+                    { jp: 'まわす', romaji: 'ma - wa - su', meaning: '轉動', breakdown: ['ま', 'わ', 'す'], note: '投完硬幣後用力「まわす（轉動）」旋鈕！' },
+                    { jp: 'にんき', romaji: 'ni - n - ki', meaning: '人氣、受歡迎', breakdown: ['に', 'ん', 'き'], note: '機台上常貼著「にんき（人氣商品）」貼紙。' },
+                    { jp: 'うりきれ', romaji: 'u - ri - ki - re', meaning: '賣完了、售罄', breakdown: ['う', 'り', 'き', 'れ'], note: '看到這個牌子代表這台扭蛋已經被轉光囉。' },
+                    { jp: 'おみやげ', romaji: 'o - mi - ya - ge', meaning: '伴手禮、紀念品', breakdown: ['お', 'み', 'や', 'げ'], note: '把扭到的可愛小物當作日本旅遊紀念品送朋友！' }
+                ],
+                dialogue: [
+                    { speaker: '旅客', jp: 'みて！ここ に ねこ の ガチャガチャ が あります よ。', romaji: 'mi-te! ko-ko ni ne-ko no ga-cha-ga-cha ga a-ri-ma-su yo.', meaning: '你看！這裡有貓咪的扭蛋機喔！', nuance: '「みて！（你看！）」是發現新事物時最自然的開口方式。' },
+                    { speaker: '朋友', jp: 'ほんとう だ！すごく かわいい ね。でも、コイン が ありません。', romaji: 'ho-n-to-u da! su-go-ku ka-wa-i-i ne. de-mo, ko-i-n ga a-ri-ma-se-n.', meaning: '真的耶！超級可愛的呢。可是，我沒有硬幣。', nuance: '句尾的「ね」用來尋求對方的認同與共鳴。' },
+                    { speaker: '旅客', jp: 'だいじょうぶ。てんいんさん に ききましょう。すみません、りょうがえき は どこ です か。', romaji: 'da-i-jo-u-bu. te-n-i-n-sa-n ni ki-ki-ma-sho-u. su-mi-ma-se-n, ryo-u-ga-e-ki wa do-ko de-su-ka.', meaning: '沒問題，我們去問問店員吧。不好意思，請問換零錢機在哪裡呢？', nuance: '「〜ましょう」表示「一起做某事吧」，語氣柔和有禮。' },
+                    { speaker: '店員', jp: 'あそこ の いりぐち の まえ に あります よ。', romaji: 'a-so-ko no i-ri-gu-chi no ma-e ni a-ri-ma-su yo.', meaning: '就在那邊的入口前面喔！', nuance: '日語習慣從大範圍（入口）講到小位置（前面）。' },
+                    { speaker: '旅客', jp: 'ありがとう ございます！さっそく おかね を いれて まわします。', romaji: 'a-ri-ga-to-u go-za-i-ma-su! sa-s-so-ku o-ka-ne o i-re-te ma-wa-shi-ma-su.', meaning: '非常謝謝你！我馬上投錢來轉轉看。', nuance: '「さっそく（馬上、立刻）」能生動表達迫不及待的心情。' },
+                    { speaker: '朋友', jp: 'やったあ！いちばん ほしかった ねこ が でました ね！', romaji: 'ya-t-ta-a! i-chi-ba-n ho-shi-ka-t-ta ne-ko ga de-ma-shi-ta ne!', meaning: '太棒了！轉出最想要的那隻貓咪了呢！', nuance: '「やったあ！」是日本人開心歡呼時最常喊的感嘆詞。' }
+                ]
+            }
+        ];
+
+        // 4. 語音合成引擎 (Web Speech API)
+        let jpVoice = null;
+
+        function initSpeechSynthesis() {
+            if (!('speechSynthesis' in window)) {
+                const warn = document.getElementById('speech-warning');
+                if (warn) warn.classList.remove('hidden');
+                return;
+            }
+            const loadVoices = () => {
+                const voices = window.speechSynthesis.getVoices();
+                jpVoice = voices.find(v => v.lang === 'ja-JP' && (v.name.includes('Google') || v.name.includes('Kyoko') || v.name.includes('Nanami')))
+                    || voices.find(v => v.lang.includes('ja'));
+            };
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function speakJapanese(text, rate = 0.85) {
+            if (!('speechSynthesis' in window)) return;
+            try {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'ja-JP';
+                if (jpVoice) utter.voice = jpVoice;
+                utter.rate = rate;
+                utter.pitch = 1.0;
+                window.speechSynthesis.speak(utter);
+            } catch (e) {
+                console.warn('語音播放失敗:', e);
+            }
+        }
+
+        // 全域 Toast 提示訊息（取代 alert）
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'bg-indigoDark text-white border-matcha',
+                warning: 'bg-amber-800 text-white border-amberJP',
+                info: 'bg-indigoJP text-white border-sakura'
+            };
+            toast.className = `${colors[type] || colors.info} border-l-4 px-4 py-3 rounded-2xl shadow-lg text-xs sm:text-sm font-bold flex items-center gap-2.5 animate-pop pointer-events-auto`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
+        // 讀取本機儲存進度
+        function loadProgress() {
+            try {
+                const raw = localStorage.getItem('wafu_kana_progress_v1');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    appState.masteredIds = parsed.masteredIds || [];
+                    appState.starredIds = parsed.starredIds || [];
+                    appState.reviewedCount = parsed.reviewedCount || 0;
+                }
+                const savedVocabRaw = localStorage.getItem('wafu_saved_vocab_v1');
+                if (savedVocabRaw) {
+                    appState.savedVocab = JSON.parse(savedVocabRaw) || [];
+                }
+                const seenWordsRaw = localStorage.getItem('wafu_seen_ai_words_v1');
+                if (seenWordsRaw) {
+                    appState.seenAIWords = JSON.parse(seenWordsRaw) || [];
+                }
+            } catch (e) {
+                console.warn('無法讀取本機儲存進度:', e);
+            }
+        }
+
+        // 儲存進度至 LocalStorage
+        function saveProgress() {
+            try {
+                localStorage.setItem('wafu_kana_progress_v1', JSON.stringify({
+                    masteredIds: appState.masteredIds,
+                    starredIds: appState.starredIds,
+                    reviewedCount: appState.reviewedCount
+                }));
+                localStorage.setItem('wafu_saved_vocab_v1', JSON.stringify(appState.savedVocab));
+                localStorage.setItem('wafu_seen_ai_words_v1', JSON.stringify(appState.seenAIWords.slice(-150)));
+            } catch (e) {
+                console.warn('無法儲存進度:', e);
+            }
+            updateDashboardStats();
+            updateSavedVocabBadge();
+        }
+
+        // 更新頂部與儀表板進度數據
+        function updateDashboardStats() {
+            const masteredCount = appState.masteredIds.length;
+            const total = KANA_DATA.length;
+            const pct = Math.round((masteredCount / total) * 100);
+
+            const statMastered = document.getElementById('stat-mastered');
+            const statCombo = document.getElementById('stat-combo');
+            const bar = document.getElementById('mastery-progress-bar');
+            const mobileBadge = document.getElementById('mobile-mastery-badge');
+            const starBadge = document.getElementById('nav-star-count');
+
+            if (statMastered) statMastered.textContent = `${masteredCount} / ${total}`;
+            if (statCombo) statCombo.textContent = `${appState.combo} 題`;
+            if (bar) bar.style.width = `${pct}%`;
+            if (mobileBadge) mobileBadge.textContent = `已掌握 ${masteredCount}/${total}`;
+            if (starBadge) starBadge.textContent = appState.starredIds.length;
+        }
+
+        function updateSavedVocabBadge() {
+            const badge = document.getElementById('saved-vocab-count');
+            if (badge) badge.textContent = appState.savedVocab.length;
+        }
+
+        // =========================================================
+        // 5. 頂部主分頁切換與模組一（五十音總覽表）
+        // =========================================================
+        function switchTab(tabName) {
+            ['chart', 'practice', 'vocab'].forEach(t => {
+                const sec = document.getElementById(`section-${t}`);
+                const btn = document.getElementById(`nav-${t}`);
+                if (sec) sec.classList.toggle('hidden', t !== tabName);
+                if (btn) {
+                    if (t === tabName) {
+                        btn.classList.add('bg-indigoJP', 'text-white', 'shadow-sm');
+                        btn.classList.remove('text-stone-600', 'hover:text-indigoJP');
+                    } else {
+                        btn.classList.remove('bg-indigoJP', 'text-white', 'shadow-sm');
+                        btn.classList.add('text-stone-600', 'hover:text-indigoJP');
+                    }
+                }
+            });
+            if (tabName === 'chart') renderKanaChart();
+            if (tabName === 'vocab' && !appState.dailyLesson) initDailyAILesson();
+        }
+
+        function setChartDisplay(mode) {
+            appState.chartDisplay = mode;
+            ['hiragana', 'katakana', 'both'].forEach(m => {
+                const mapId = m === 'hiragana' ? 'hira' : m === 'katakana' ? 'kata' : 'both';
+                const btn = document.getElementById(`btn-chart-${mapId}`);
+                if (!btn) return;
+                if (m === mode) {
+                    btn.classList.add('bg-white', 'text-indigoJP', 'shadow-sm');
+                    btn.classList.remove('text-stone-600');
+                } else {
+                    btn.classList.remove('bg-white', 'text-indigoJP', 'shadow-sm');
+                    btn.classList.add('text-stone-600');
+                }
+            });
+            renderKanaChart();
+        }
+
+        function renderKanaChart() {
+            const grid = document.getElementById('kana-chart-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            // 依 10 行 x 5 段排列（や行與わ行空格補位）
+            const rowsOrder = ['あ行', 'か行', 'さ行', 'た行', 'な行', 'は行', 'ま行', 'や行', 'ら行', 'わ行', '撥音'];
+            rowsOrder.forEach(rowName => {
+                const rowItems = KANA_DATA.filter(k => k.row === rowName);
+                for (let col = 0; col < 5; col++) {
+                    if (rowName === '撥音' && col > 0) continue;
+                    const item = rowItems.find(k => k.col === col);
+                    if (!item) {
+                        const emptyCell = document.createElement('div');
+                        emptyCell.className = 'h-16 sm:h-20 rounded-2xl bg-stone-50/60 border border-dashed border-stone-200/60';
+                        grid.appendChild(emptyCell);
+                        continue;
+                    }
+
+                    const isMastered = appState.masteredIds.includes(item.id);
+                    const isStarred = appState.starredIds.includes(item.id);
+                    const isSelected = appState.selectedDetailId === item.id;
+
+                    const cell = document.createElement('button');
+                    cell.className = `relative h-16 sm:h-20 rounded-2xl border-2 transition flex flex-col items-center justify-center btn-bounce ${
+                        isSelected
+                            ? 'border-indigoJP bg-indigoJP/10 shadow-sm'
+                            : isMastered
+                                ? 'border-matcha/40 bg-emerald-50/50 hover:border-matcha'
+                                : 'border-stone-200/80 bg-washi/60 hover:border-indigoJP/40 hover:bg-white'
+                    }`;
+                    cell.onclick = () => selectDetailKana(item.id);
+
+                    let charHtml = '';
+                    if (appState.chartDisplay === 'hiragana') {
+                        charHtml = `<span class="font-jp text-xl sm:text-2xl font-black text-indigoDark">${item.hira}</span>`;
+                    } else if (appState.chartDisplay === 'katakana') {
+                        charHtml = `<span class="font-jp text-xl sm:text-2xl font-black text-indigoJP">${item.kata}</span>`;
+                    } else {
+                        charHtml = `<div class="flex items-baseline gap-1">
+                            <span class="font-jp text-lg sm:text-xl font-black text-indigoDark">${item.hira}</span>
+                            <span class="font-jp text-sm sm:text-base font-bold text-sakura">${item.kata}</span>
+                        </div>`;
+                    }
+
+                    cell.innerHTML = `
+                        ${isStarred ? '<span class="absolute top-1.5 right-1.5 text-[10px] text-amberJP"><i class="fa-solid fa-star"></i></span>' : ''}
+                        ${isMastered ? '<span class="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-matcha"></span>' : ''}
+                        ${charHtml}
+                        <span class="text-[11px] font-bold text-stone-400 mt-0.5">${item.romaji}</span>
+                    `;
+                    grid.appendChild(cell);
+                }
+            });
+
+            updateDetailCard();
+        }
+
+        function selectDetailKana(id) {
+            appState.selectedDetailId = id;
+            const item = KANA_DATA.find(k => k.id === id);
+            if (item) speakJapanese(item.hira, 0.8);
+            renderKanaChart();
+        }
+
+        function updateDetailCard() {
+            const item = KANA_DATA.find(k => k.id === appState.selectedDetailId) || KANA_DATA[0];
+            document.getElementById('detail-row-tag').textContent = item.row;
+            document.getElementById('detail-hira').textContent = item.hira;
+            document.getElementById('detail-kata').textContent = item.kata;
+            document.getElementById('detail-romaji').textContent = item.romaji;
+            document.getElementById('detail-mnemonic').textContent = item.mnemonic;
+
+            const isStarred = appState.starredIds.includes(item.id);
+            const starBtn = document.getElementById('detail-star-btn');
+            starBtn.innerHTML = `<i class="${isStarred ? 'fa-solid text-amberJP' : 'fa-regular'} fa-star"></i>`;
+        }
+
+        function speakCurrentDetail() {
+            const item = KANA_DATA.find(k => k.id === appState.selectedDetailId) || KANA_DATA[0];
+            speakJapanese(item.hira, 0.78);
+        }
+
+        function toggleCurrentDetailStar() {
+            toggleStarKana(appState.selectedDetailId);
+            updateDetailCard();
+            renderKanaChart();
+        }
+
+        function toggleStarKana(id) {
+            const idx = appState.starredIds.indexOf(id);
+            const item = KANA_DATA.find(k => k.id === id);
+            if (idx === -1) {
+                appState.starredIds.push(id);
+                showToast(`已將「${item.hira} (${item.romaji})」加入重點錯題特訓！`, 'info');
+            } else {
+                appState.starredIds.splice(idx, 1);
+                showToast(`已取消「${item.hira}」的重點標記`, 'info');
+            }
+            saveProgress();
+        }
+
+        // =========================================================
+        // 6. 模組二：五十音反覆記憶練習（翻牌間隔 + 測驗 + 錯題特訓）
+        // =========================================================
+        function setPracticeMode(mode) {
+            appState.practiceMode = mode;
+            ['flashcard', 'quiz', 'weakness'].forEach(m => {
+                const btn = document.getElementById(`pmode-${m}`);
+                if (!btn) return;
+                if (m === mode) {
+                    btn.classList.add('border-indigoJP', 'bg-indigoJP/5');
+                    btn.classList.remove('border-stone-200', 'bg-white');
+                } else {
+                    btn.classList.remove('border-indigoJP', 'bg-indigoJP/5');
+                    btn.classList.add('border-stone-200', 'bg-white');
+                }
+            });
+
+            const fcContainer = document.getElementById('practice-flashcard-container');
+            const qzContainer = document.getElementById('practice-quiz-container');
+            const subtypeBar = document.getElementById('quiz-subtype-bar');
+
+            if (mode === 'flashcard') {
+                fcContainer.classList.remove('hidden');
+                qzContainer.classList.add('hidden');
+                renderCurrentFlashcard();
+            } else {
+                fcContainer.classList.add('hidden');
+                qzContainer.classList.remove('hidden');
+                subtypeBar.classList.toggle('hidden', mode === 'weakness');
+                setupQuizQuestion();
+            }
+        }
+
+        function setFlashcardScript(script) {
+            appState.flashcardScript = script;
+            const hBtn = document.getElementById('fc-script-hira');
+            const kBtn = document.getElementById('fc-script-kata');
+            if (script === 'hiragana') {
+                hBtn.classList.add('bg-indigoJP', 'text-white');
+                hBtn.classList.remove('text-stone-600');
+                kBtn.classList.remove('bg-indigoJP', 'text-white');
+                kBtn.classList.add('text-stone-600');
+            } else {
+                kBtn.classList.add('bg-indigoJP', 'text-white');
+                kBtn.classList.remove('text-stone-600');
+                hBtn.classList.remove('bg-indigoJP', 'text-white');
+                hBtn.classList.add('text-stone-600');
+            }
+            renderCurrentFlashcard();
+        }
+
+        function resetPracticeQueue() {
+            const scope = document.getElementById('fc-scope-select')?.value || 'all';
+            let pool = [...KANA_DATA];
+            if (scope === 'unmastered') {
+                pool = pool.filter(k => !appState.masteredIds.includes(k.id));
+                if (pool.length === 0) pool = [...KANA_DATA];
+            } else if (scope.startsWith('row-')) {
+                const rowMap = { 'row-a': 'あ行', 'row-ka': 'か行', 'row-sa': 'さ行', 'row-ta': 'た行', 'row-na': 'な行' };
+                pool = pool.filter(k => k.row === rowMap[scope]);
+            }
+            appState.flashcardQueue = pool.sort(() => Math.random() - 0.5);
+            appState.isFlipped = false;
+            renderCurrentFlashcard();
+        }
+
+        function renderCurrentFlashcard() {
+            if (appState.flashcardQueue.length === 0) resetPracticeQueue();
+            const current = appState.flashcardQueue[0];
+            if (!current) return;
+
+            const inner = document.getElementById('flashcard-inner');
+            if (inner) inner.classList.toggle('is-flipped', appState.isFlipped);
+
+            document.getElementById('fc-front-row').textContent = current.row;
+            document.getElementById('fc-front-kana').textContent =
+                appState.flashcardScript === 'hiragana' ? current.hira : current.kata;
+            document.getElementById('fc-queue-badge').textContent = `待複習佇列：${appState.flashcardQueue.length} 張`;
+
+            const isStarred = appState.starredIds.includes(current.id);
+            document.getElementById('fc-star-btn').innerHTML =
+                `<i class="${isStarred ? 'fa-solid text-amberJP' : 'fa-regular'} fa-star"></i>`;
+
+            document.getElementById('fc-back-hira').textContent = current.hira;
+            document.getElementById('fc-back-kata').textContent = current.kata;
+            document.getElementById('fc-back-romaji').textContent = current.romaji;
+            document.getElementById('fc-back-mnemonic').textContent = current.mnemonic;
+        }
+
+        function flipFlashcard() {
+            appState.isFlipped = !appState.isFlipped;
+            const inner = document.getElementById('flashcard-inner');
+            if (inner) inner.classList.toggle('is-flipped', appState.isFlipped);
+            if (appState.isFlipped) {
+                speakCurrentFlashcard();
+            }
+        }
+
+        function speakCurrentFlashcard() {
+            const current = appState.flashcardQueue[0];
+            if (current) speakJapanese(current.hira, 0.8);
+        }
+
+        function toggleCurrentFlashcardStar() {
+            const current = appState.flashcardQueue[0];
+            if (!current) return;
+            toggleStarKana(current.id);
+            renderCurrentFlashcard();
+        }
+
+        // 間隔重複回饋評分演算法
+        function rateFlashcard(rating) {
+            const current = appState.flashcardQueue.shift();
+            if (!current) return;
+
+            appState.reviewedCount++;
+
+            if (rating === 'forgot') {
+                // 忘記：移除已掌握狀態、自動標記重點，並安插到 2 題後立即重考
+                appState.masteredIds = appState.masteredIds.filter(id => id !== current.id);
+                if (!appState.starredIds.includes(current.id)) {
+                    appState.starredIds.push(current.id);
+                }
+                appState.combo = 0;
+                const insertPos = Math.min(2, appState.flashcardQueue.length);
+                appState.flashcardQueue.splice(insertPos, 0, current);
+                showToast(`已排入 2 題後立即重考「${current.hira}」並加入錯題本！`, 'warning');
+            } else if (rating === 'fuzzy') {
+                // 有點猶豫：安插到 6 題後再次複習
+                appState.combo++;
+                const insertPos = Math.min(6, appState.flashcardQueue.length);
+                appState.flashcardQueue.splice(insertPos, 0, current);
+                showToast(`已排入 6 題後再次複習「${current.hira}」`, 'info');
+            } else if (rating === 'mastered') {
+                // 秒答記住：標記已掌握，放到佇列最尾端
+                if (!appState.masteredIds.includes(current.id)) {
+                    appState.masteredIds.push(current.id);
+                }
+                appState.combo++;
+                appState.flashcardQueue.push(current);
+                showToast(`太棒了！「${current.hira} (${current.romaji})」已標記為掌握 🎉`, 'success');
+            }
+
+            appState.isFlipped = false;
+            saveProgress();
+            renderCurrentFlashcard();
+        }
+
+        // 模式 B & C：測驗與錯題特訓
+        function setQuizSubtype(subtype) {
+            appState.quizSubtype = subtype;
+            ['romaji-to-kana', 'audio-to-kana', 'kana-to-romaji'].forEach(st => {
+                const btn = document.getElementById(`qsub-${st}`);
+                if (!btn) return;
+                if (st === subtype) {
+                    btn.classList.add('bg-indigoJP', 'text-white');
+                    btn.classList.remove('bg-white', 'border', 'border-stone-200', 'text-stone-600');
+                } else {
+                    btn.classList.remove('bg-indigoJP', 'text-white');
+                    btn.classList.add('bg-white', 'border', 'border-stone-200', 'text-stone-600');
+                }
+            });
+            setupQuizQuestion();
+        }
+
+        function setupQuizQuestion() {
+            const isWeaknessMode = appState.practiceMode === 'weakness';
+            const emptyState = document.getElementById('weakness-empty-state');
+            const cardBox = document.getElementById('quiz-card-box');
+
+            let pool = KANA_DATA;
+            if (isWeaknessMode) {
+                pool = KANA_DATA.filter(k => appState.starredIds.includes(k.id));
+                if (pool.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    cardBox.classList.add('hidden');
+                    return;
+                }
+            }
+
+            emptyState.classList.add('hidden');
+            cardBox.classList.remove('hidden');
+
+            const target = pool[Math.floor(Math.random() * pool.length)];
+            appState.currentQuizItem = target;
+            appState.quizAnswered = false;
+
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            feedbackBox.classList.add('hidden');
+
+            const modeBadge = document.getElementById('quiz-mode-badge');
+            const streakInfo = document.getElementById('quiz-streak-info');
+            const instruction = document.getElementById('quiz-instruction');
+            const qDisplay = document.getElementById('quiz-question-display');
+            const audioBtn = document.getElementById('quiz-audio-btn');
+
+            if (isWeaknessMode) {
+                const streak = appState.weaknessStreak[target.id] || 0;
+                modeBadge.textContent = `🔥 錯題特訓（剩餘 ${pool.length} 音）`;
+                streakInfo.textContent = `畢業進度：${streak} / 2 次連對`;
+            } else {
+                modeBadge.textContent = '主動回憶測驗';
+                streakInfo.textContent = `連對：${appState.combo} 題`;
+            }
+
+            const effectiveSubtype = isWeaknessMode ? 'romaji-to-kana' : appState.quizSubtype;
+
+            if (effectiveSubtype === 'romaji-to-kana') {
+                instruction.textContent = '請選出對應的平假名';
+                qDisplay.textContent = target.romaji;
+                audioBtn.classList.remove('hidden');
+            } else if (effectiveSubtype === 'audio-to-kana') {
+                instruction.textContent = '請仔細聆聽發音，選出正確的平假名';
+                qDisplay.innerHTML = '<i class="fa-solid fa-ear-listen text-sakura"></i>';
+                audioBtn.classList.remove('hidden');
+                speakJapanese(target.hira, 0.8);
+            } else {
+                instruction.textContent = '請選出這個假名的羅馬拼音';
+                qDisplay.textContent = target.hira;
+                audioBtn.classList.remove('hidden');
+            }
+
+            // 產生 4 個選項
+            const distractors = KANA_DATA.filter(k => k.id !== target.id)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            const options = [target, ...distractors].sort(() => Math.random() - 0.5);
+
+            const optGrid = document.getElementById('quiz-options-grid');
+            optGrid.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'py-4 px-3 rounded-2xl border-2 border-stone-200 bg-washi/60 hover:border-indigoJP font-jp text-2xl sm:text-3xl font-black text-indigoDark transition btn-bounce';
+                btn.textContent = effectiveSubtype === 'kana-to-romaji' ? opt.romaji : opt.hira;
+                btn.onclick = () => handleQuizAnswer(opt, btn, effectiveSubtype);
+                optGrid.appendChild(btn);
+            });
+        }
+
+        function replayQuizAudio() {
+            if (appState.currentQuizItem) {
+                speakJapanese(appState.currentQuizItem.hira, 0.8);
+            }
+        }
+
+        function handleQuizAnswer(selectedOpt, btnEl, subtype) {
+            if (appState.quizAnswered) return;
+            appState.quizAnswered = true;
+
+            const target = appState.currentQuizItem;
+            const isCorrect = selectedOpt.id === target.id;
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            const feedbackTitle = document.getElementById('quiz-feedback-title');
+            const feedbackMnemonic = document.getElementById('quiz-feedback-mnemonic');
+
+            speakJapanese(target.hira, 0.8);
+
+            if (isCorrect) {
+                btnEl.classList.remove('border-stone-200', 'bg-washi/60');
+                btnEl.classList.add('border-matcha', 'bg-emerald-50', 'text-matcha');
+                appState.combo++;
+                if (!appState.masteredIds.includes(target.id)) {
+                    appState.masteredIds.push(target.id);
+                }
+
+                if (appState.practiceMode === 'weakness') {
+                    appState.weaknessStreak[target.id] = (appState.weaknessStreak[target.id] || 0) + 1;
+                    if (appState.weaknessStreak[target.id] >= 2) {
+                        appState.starredIds = appState.starredIds.filter(id => id !== target.id);
+                        delete appState.weaknessStreak[target.id];
+                        feedbackTitle.innerHTML = `<span class="text-matcha">🎓 連對 2 次！「${target.hira} (${target.romaji})」已成功從特訓清單畢業！</span>`;
+                    } else {
+                        feedbackTitle.innerHTML = `<span class="text-matcha">✅ 答對了！再對 1 次即可畢業！（${target.hira} / ${target.kata} = ${target.romaji}）</span>`;
+                    }
+                } else {
+                    feedbackTitle.innerHTML = `<span class="text-matcha">✅ 完全正確！${target.hira}（片假名：${target.kata}）= ${target.romaji}</span>`;
+                }
+            } else {
+                btnEl.classList.remove('border-stone-200', 'bg-washi/60');
+                btnEl.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-600');
+                appState.combo = 0;
+                appState.weaknessStreak[target.id] = 0;
+                if (!appState.starredIds.includes(target.id)) {
+                    appState.starredIds.push(target.id);
+                }
+                feedbackTitle.innerHTML = `<span class="text-rose-600">❌ 記錯囉！正確答案是「${target.hira}（${target.kata} / ${target.romaji}）」，已自動加入錯題特訓！</span>`;
+            }
+
+            feedbackMnemonic.textContent = `💡 記憶口訣：${target.mnemonic}`;
+            feedbackBox.classList.remove('hidden');
+            saveProgress();
+        }
+
+        // =========================================================
+        // 7. 模組三：AI 每日新單字與情境會話初始化與分頁切換
+        // =========================================================
+        function switchVocabSubtab(subtab) {
+            appState.vocabSubtab = subtab;
+            ['ai-daily', 'saved', 'starter'].forEach(st => {
+                const view = document.getElementById(`vocab-view-${st}`);
+                const btn = document.getElementById(`vsub-${st}`);
+                if (view) view.classList.toggle('hidden', st !== subtab);
+                if (btn) {
+                    if (st === subtab) {
+                        btn.classList.add('bg-white', 'text-indigoJP', 'shadow-sm');
+                        btn.classList.remove('text-stone-600');
+                    } else {
+                        btn.classList.remove('bg-white', 'text-indigoJP', 'shadow-sm');
+                        btn.classList.add('text-stone-600');
+                    }
+                }
+            });
+            if (subtab === 'saved') renderSavedVocabList();
+        }
+
+        function initDailyAILesson() {
+            const todayStr = new Date().toDateString();
+            const badge = document.getElementById('ai-daily-date-badge');
+            if (badge) {
+                const now = new Date();
+                badge.textContent = `${now.getMonth() + 1}/${now.getDate()} 今日限定課程`;
+            }
+
+            try {
+                const cachedRaw = localStorage.getItem('wafu_ai_daily_lesson_v1');
+                if (cachedRaw) {
+                    const cached = JSON.parse(cachedRaw);
+                    if (cached.date === todayStr && cached.lesson) {
+                        appState.dailyLesson = cached.lesson;
+                        renderDailyAILesson();
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn('讀取每日課程快取失敗:', e);
+            }
+
+            generateDailyAILesson(false);
+        }
+
+        // 帶指數退避的重試 Fetch 輔助函式
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            let delay = 1000;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                try {
+                    const res = await fetch(url, options);
+                    if (res.ok) return res;
+                    if (attempt === maxRetries) throw new Error(`HTTP ${res.status}`);
+                } catch (err) {
+                    if (attempt === maxRetries) throw err;
+                }
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+            }
+        }
+
+        // 呼叫 Gemini API 動態生成今日主題單字與情境會話
+        async function generateDailyAILesson(isManualRefresh = false) {
+            const loadingEl = document.getElementById('ai-loading-state');
+            const contentEl = document.getElementById('ai-lesson-content');
+            const btnGenerate = document.getElementById('btn-generate-ai');
+
+            if (loadingEl) loadingEl.classList.remove('hidden');
+            if (contentEl) contentEl.classList.add('hidden');
+            if (btnGenerate) {
+                btnGenerate.disabled = true;
+                btnGenerate.classList.add('opacity-60', 'cursor-not-allowed');
+            }
+
+            const selectedTheme = document.getElementById('ai-theme-select')?.value || '隨機驚喜微場景';
+            const randomScenario = CREATIVE_MICRO_SCENARIOS[Math.floor(Math.random() * CREATIVE_MICRO_SCENARIOS.length)];
+            const actualTopicGoal = selectedTheme === '隨機驚喜微場景'
+                ? `請以「${randomScenario}」為具體微場景設計課程`
+                : `請圍繞「${selectedTheme}」，並結合「${randomScenario}」的創意切角設計課程`;
+
+            const masteredCount = appState.masteredIds.length;
+            const usePureKana = masteredCount < 35;
+            const avoidListStr = appState.seenAIWords.length > 0
+                ? `【絕對禁止重複以下過去已學過的單字】：${appState.seenAIWords.join('、')}。請務必挑選全新、不同詞性（名詞、動詞、形容詞混合）的實用單字！`
+                : '';
+
+            const prompt = `你是一位幽默且專業的台灣繁體中文日語教師，正在教導一位「零基礎、剛學完或正在學五十音」的台灣學生。
+${actualTopicGoal}。
+學生目前掌握了 ${masteredCount}/46 個五十音。
+${usePureKana ? '【重要規則】因為學生剛起步，所有日文單字與例句「請全部使用純平假名或純片假名」（絕對不要寫出任何漢字！詞與詞之間請加一個半形空格方便初學者斷句拼讀）。' : '【重要規則】日文單字與例句請以平假名／片假名為主（最多穿插1~2個超基礎漢字並附上括號讀音），詞與詞之間請加半形空格方便斷句。'}
+${avoidListStr}
+
+請嚴格回傳純 JSON 格式（不要包含 markdown 的 \`\`\`json 標記），結構如下：
+{
+  "topic": "生動有趣的今日課程標題（繁體中文，約8~14字）",
+  "grammarTip": "一句白話、零術語的今日超實用句型或文化小撇步（繁體中文）",
+  "words": [
+    {
+      "jp": "純假名日文單字",
+      "romaji": "用連字號分隔的羅馬拼音，例如 su - shi",
+      "meaning": "繁體中文意思",
+      "breakdown": ["假名1", "假名2"],
+      "note": "一句有趣的記憶法或日本生活小知識（繁體中文）"
+    }
+  ],
+  "dialogue": [
+    {
+      "speaker": "角色A名稱（繁體中文，如：旅客）",
+      "jp": "純假名短句（詞與詞之間用半形空格隔開）",
+      "romaji": "羅馬拼音",
+      "meaning": "繁體中文翻譯",
+      "nuance": "一句白話語感解析（說明這句話中的語氣詞、發音連音或日本人真實說話習慣）"
+    }
+  ]
+}
+請確保 words 陣列剛好包含 10 個不同單字。
+【關於 dialogue 的重要要求】：
+請設計成「一齣完整、有頭有尾、自然起承轉合的情境小對話」（不限句數，建議 5 到 7 句），包含「開場招呼 → 互動詢問/點餐/討論 → 意外小插曲或推薦 → 溫暖道謝或結尾」，讓學習者能透過上下文自然體會日語的真實語氣與語感，並自然融入上面教到的新單字！`;
+
+            const customApiKey = (localStorage.getItem('wafu_custom_gemini_apikey') || '').trim();
+            const apiKey = customApiKey || "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: {
+                            temperature: 1.0,
+                            responseMimeType: "application/json"
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawText) throw new Error('AI 回傳內容為空');
+
+                const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+                const lessonObj = JSON.parse(cleanJson);
+
+                if (!lessonObj.words || !Array.isArray(lessonObj.words) || lessonObj.words.length === 0) {
+                    throw new Error('AI 資料格式不完整');
+                }
+
+                appState.dailyLesson = lessonObj;
+                lessonObj.words.forEach(w => {
+                    if (w.jp && !appState.seenAIWords.includes(w.jp)) {
+                        appState.seenAIWords.push(w.jp);
+                    }
+                });
+                saveProgress();
+
+                localStorage.setItem('wafu_ai_daily_lesson_v1', JSON.stringify({
+                    date: new Date().toDateString(),
+                    lesson: lessonObj
+                }));
+
+                if (isManualRefresh) {
+                    showToast(`✨ 已為您生成全新主題：「${lessonObj.topic}」！`, 'success');
+                }
+            } catch (err) {
+                console.warn('AI 生成改用本地精選微場景題庫:', err);
+                const fallbackIdx = Math.floor(Math.random() * FALLBACK_AI_LESSONS.length);
+                appState.dailyLesson = FALLBACK_AI_LESSONS[fallbackIdx];
+                if (isManualRefresh) {
+                    showToast('已為您切換精選生活情境主題包！', 'info');
+                }
+            } finally {
+                if (loadingEl) loadingEl.classList.add('hidden');
+                if (contentEl) contentEl.classList.remove('hidden');
+                if (btnGenerate) {
+                    btnGenerate.disabled = false;
+                    btnGenerate.classList.remove('opacity-60', 'cursor-not-allowed');
+                }
+                renderDailyAILesson();
+            }
+        }
+
+        function renderDailyAILesson() {
+            const lesson = appState.dailyLesson;
+            if (!lesson) return;
+
+            document.getElementById('ai-lesson-topic').textContent = lesson.topic || '今日日語微場景';
+            document.getElementById('ai-lesson-tip').textContent = `💡 今日小撇步：${lesson.grammarTip || ''}`;
+
+            const masteredCount = appState.masteredIds.length;
+            document.getElementById('ai-lesson-level-tag').textContent =
+                masteredCount < 35 ? `零基礎純假名模式 (${masteredCount}/46音)` : `進階拼讀模式 (${masteredCount}/46音)`;
+
+            const wordsGrid = document.getElementById('ai-words-grid');
+            wordsGrid.innerHTML = '';
+
+            (lesson.words || []).forEach(word => {
+                const isSaved = appState.savedVocab.some(v => v.jp === word.jp);
+                const breakdownHtml = (word.breakdown || []).map(ch =>
+                    `<span class="px-2 py-0.5 rounded-lg bg-stone-100 text-stone-600 font-jp text-xs font-bold">${ch}</span>`
+                ).join('');
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm hover:border-indigoJP/40 transition flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <h5 class="font-jp text-2xl font-black text-indigoDark">${word.jp}</h5>
+                                <p class="text-xs font-bold text-indigoJP mt-0.5">${word.romaji}</p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="speakJapanese('${word.jp.replace(/'/g, "\\'")}', 0.8)" class="w-9 h-9 rounded-full bg-sakuraLight text-indigoJP hover:bg-sakura hover:text-white flex items-center justify-center transition" title="聆聽發音">
+                                    <i class="fa-solid fa-volume-high text-xs"></i>
+                                </button>
+                                <button onclick="toggleSaveVocab('${word.jp.replace(/'/g, "\\'")}')" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-amber-50 flex items-center justify-center transition" title="收藏單字">
+                                    <i class="${isSaved ? 'fa-solid text-amberJP' : 'fa-regular text-stone-400'} fa-star text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="text-base font-extrabold text-matcha mt-3">${word.meaning}</p>
+                        <div class="flex flex-wrap gap-1.5 mt-2.5">${breakdownHtml}</div>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-3 pt-2.5 border-t border-stone-100 leading-relaxed">${word.note || ''}</p>
+                `;
+                wordsGrid.appendChild(card);
+            });
+
+            const dialogueList = document.getElementById('ai-dialogue-list');
+            dialogueList.innerHTML = '';
+
+            // 取得不同說話者名單以分配左右對話氣泡方向
+            const speakers = [];
+            (lesson.dialogue || []).forEach(l => {
+                if (l.speaker && !speakers.includes(l.speaker)) speakers.push(l.speaker);
+            });
+
+            (lesson.dialogue || []).forEach((line, idx) => {
+                const isSecondSpeaker = speakers.indexOf(line.speaker) % 2 === 1;
+                const row = document.createElement('div');
+                row.id = `dialogue-line-${idx}`;
+                row.className = `dialogue-line-card rounded-2xl p-4 sm:p-5 border transition-all duration-300 ${
+                    isSecondSpeaker
+                        ? 'bg-sakuraLight/40 border-sakura/30 sm:ml-6'
+                        : 'bg-white border-stone-200/90 sm:mr-6'
+                }`;
+
+                const jpBlurClass = appState.dialogueMaskJp ? 'blur-md select-none hover:blur-none transition cursor-pointer' : '';
+                const zhBlurClass = appState.dialogueMaskZh ? 'blur-md select-none hover:blur-none transition cursor-pointer' : '';
+
+                row.innerHTML = `
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold ${
+                                    isSecondSpeaker ? 'bg-sakura text-indigoDark' : 'bg-indigoJP text-white'
+                                }">
+                                    ${line.speaker || `角色 ${idx + 1}`}
+                                </span>
+                                <span class="text-[11px] font-bold text-stone-400">#${idx + 1}</span>
+                            </div>
+
+                            <div class="${jpBlurClass}" title="${appState.dialogueMaskJp ? '點擊或滑鼠移入偷看日文' : ''}">
+                                <p class="font-jp text-lg sm:text-xl font-black text-indigoDark leading-snug">${line.jp}</p>
+                                <p class="text-xs font-bold text-indigoJP mt-1">${line.romaji}</p>
+                            </div>
+
+                            <div class="mt-2 ${zhBlurClass}" title="${appState.dialogueMaskZh ? '點擊或滑鼠移入偷看中文' : ''}">
+                                <p class="text-xs sm:text-sm font-medium text-stone-700">${line.meaning}</p>
+                            </div>
+
+                            ${line.nuance ? `
+                            <div class="mt-2.5 pt-2 border-t border-stone-200/60 flex items-start gap-1.5 text-[11px] sm:text-xs text-stone-500">
+                                <i class="fa-solid fa-comment-dots text-amberJP mt-0.5 shrink-0"></i>
+                                <span><strong class="text-indigoDark">語感小解析：</strong>${line.nuance}</span>
+                            </div>` : ''}
+                        </div>
+
+                        <button onclick="speakJapanese('${line.jp.replace(/'/g, "\\'")}', 0.82)" class="w-10 h-10 rounded-2xl bg-indigoJP/10 text-indigoJP hover:bg-indigoJP hover:text-white flex items-center justify-center shrink-0 transition btn-bounce" title="朗讀這一句">
+                            <i class="fa-solid fa-volume-high text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                dialogueList.appendChild(row);
+            });
+        }
+
+        // 切換對話遮罩模式（盲聽練語感 / 遮住中文）
+        function toggleDialogueMask(type) {
+            if (type === 'jp') {
+                appState.dialogueMaskJp = !appState.dialogueMaskJp;
+                const btn = document.getElementById('btn-mask-jp');
+                if (btn) {
+                    btn.classList.toggle('bg-indigoJP', appState.dialogueMaskJp);
+                    btn.classList.toggle('text-white', appState.dialogueMaskJp);
+                    btn.classList.toggle('bg-white', !appState.dialogueMaskJp);
+                    btn.classList.toggle('text-stone-600', !appState.dialogueMaskJp);
+                }
+            } else if (type === 'zh') {
+                appState.dialogueMaskZh = !appState.dialogueMaskZh;
+                const btn = document.getElementById('btn-mask-zh');
+                if (btn) {
+                    btn.classList.toggle('bg-amberJP', appState.dialogueMaskZh);
+                    btn.classList.toggle('text-white', appState.dialogueMaskZh);
+                    btn.classList.toggle('bg-white', !appState.dialogueMaskZh);
+                    btn.classList.toggle('text-stone-600', !appState.dialogueMaskZh);
+                }
+            }
+            renderDailyAILesson();
+        }
+
+        // 連續朗讀整段情境小對話（逐句高亮追蹤，沉浸式培養語感）
+        async function playFullDialogue() {
+            const lines = appState.dailyLesson?.dialogue || [];
+            if (lines.length === 0) return;
+
+            if (!('speechSynthesis' in window)) {
+                showToast('您的瀏覽器不支援語音朗讀功能', 'warning');
+                return;
+            }
+
+            const playBtn = document.getElementById('btn-play-all-dialogue');
+
+            // 若正在播放則停止
+            if (appState.isPlayingFullDialogue) {
+                window.speechSynthesis.cancel();
+                appState.isPlayingFullDialogue = false;
+                if (playBtn) {
+                    playBtn.innerHTML = '<i class="fa-solid fa-play"></i><span>連續朗讀整段對話</span>';
+                    playBtn.classList.remove('bg-rose-500');
+                    playBtn.classList.add('bg-matcha');
+                }
+                document.querySelectorAll('.dialogue-line-card').forEach(el => el.classList.remove('ring-2', 'ring-matcha', 'shadow-md'));
+                return;
+            }
+
+            appState.isPlayingFullDialogue = true;
+            if (playBtn) {
+                playBtn.innerHTML = '<i class="fa-solid fa-stop"></i><span>停止連續朗讀</span>';
+                playBtn.classList.remove('bg-matcha');
+                playBtn.classList.add('bg-rose-500');
+            }
+
+            for (let i = 0; i < lines.length; i++) {
+                if (!appState.isPlayingFullDialogue) break;
+
+                // 高亮目前朗讀的句子卡片
+                document.querySelectorAll('.dialogue-line-card').forEach(el => el.classList.remove('ring-2', 'ring-matcha', 'shadow-md'));
+                const currentCard = document.getElementById(`dialogue-line-${i}`);
+                if (currentCard) {
+                    currentCard.classList.add('ring-2', 'ring-matcha', 'shadow-md');
+                    currentCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                await new Promise(resolve => {
+                    window.speechSynthesis.cancel();
+                    const utter = new SpeechSynthesisUtterance(lines[i].jp);
+                    utter.lang = 'ja-JP';
+                    if (jpVoice) utter.voice = jpVoice;
+                    utter.rate = 0.82;
+                    utter.onend = () => setTimeout(resolve, 450);
+                    utter.onerror = () => resolve();
+                    window.speechSynthesis.speak(utter);
+                });
+            }
+
+            appState.isPlayingFullDialogue = false;
+            document.querySelectorAll('.dialogue-line-card').forEach(el => el.classList.remove('ring-2', 'ring-matcha', 'shadow-md'));
+            if (playBtn) {
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i><span>連續朗讀整段對話</span>';
+                playBtn.classList.remove('bg-rose-500');
+                playBtn.classList.add('bg-matcha');
+            }
+        }
+
+        // =========================================================
+        // 8. 單字收藏本、基礎必學精選、隨堂測驗與 API 設定
+        // =========================================================
+        function toggleSaveVocab(jpText) {
+            const lessonWords = appState.dailyLesson?.words || [];
+            const target = lessonWords.find(w => w.jp === jpText) || appState.savedVocab.find(w => w.jp === jpText);
+            if (!target) return;
+
+            const idx = appState.savedVocab.findIndex(v => v.jp === jpText);
+            if (idx === -1) {
+                appState.savedVocab.push(target);
+                showToast(`⭐ 已將「${target.jp}」加入我的單字收藏本！`, 'success');
+            } else {
+                appState.savedVocab.splice(idx, 1);
+                showToast(`已從收藏本移除「${target.jp}」`, 'info');
+            }
+            saveProgress();
+            renderDailyAILesson();
+            if (appState.vocabSubtab === 'saved') renderSavedVocabList();
+        }
+
+        function renderSavedVocabList() {
+            const emptyState = document.getElementById('saved-empty-state');
+            const grid = document.getElementById('saved-words-grid');
+            if (!grid || !emptyState) return;
+
+            if (appState.savedVocab.length === 0) {
+                emptyState.classList.remove('hidden');
+                grid.innerHTML = '';
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = '';
+
+            appState.savedVocab.forEach(word => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <h5 class="font-jp text-2xl font-black text-indigoDark">${word.jp}</h5>
+                                <p class="text-xs font-bold text-indigoJP mt-0.5">${word.romaji}</p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="speakJapanese('${word.jp.replace(/'/g, "\\'")}', 0.8)" class="w-9 h-9 rounded-full bg-sakuraLight text-indigoJP hover:bg-sakura hover:text-white flex items-center justify-center transition">
+                                    <i class="fa-solid fa-volume-high text-xs"></i>
+                                </button>
+                                <button onclick="toggleSaveVocab('${word.jp.replace(/'/g, "\\'")}')" class="w-9 h-9 rounded-full bg-amber-50 text-amberJP flex items-center justify-center transition" title="移除收藏">
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-base font-extrabold text-matcha mt-3">${word.meaning}</p>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-3 pt-2.5 border-t border-stone-100">${word.note || ''}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderStarterVocab() {
+            const grid = document.getElementById('vocab-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            VOCAB_DATA.forEach(item => {
+                const isPhrase = item.type === 'phrase';
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${isPhrase ? 'bg-sakuraLight text-indigoJP' : 'bg-indigoJP/10 text-indigoJP'}">
+                                ${isPhrase ? '日常會話' : '基礎單字'}
+                            </span>
+                            <button onclick="speakJapanese('${item.jp}', 0.8)" class="w-9 h-9 rounded-full bg-stone-100 text-indigoJP hover:bg-indigoJP hover:text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                        </div>
+                        <h5 class="font-jp text-2xl font-black text-indigoDark">${item.jp}</h5>
+                        <p class="text-xs font-bold text-indigoJP mt-0.5">${item.romaji}</p>
+                        <p class="text-base font-extrabold text-matcha mt-2.5">${item.meaning}</p>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-3 pt-2.5 border-t border-stone-100">${item.tip}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 今日新單字隨堂小測驗彈窗邏輯
+        function openDailyMiniQuiz() {
+            const words = appState.dailyLesson?.words || [];
+            if (words.length < 4) {
+                showToast('請先生成今日 AI 新單字課程後再進行測驗！', 'warning');
+                return;
+            }
+            appState.dailyQuizState = {
+                questions: [...words].sort(() => Math.random() - 0.5),
+                index: 0,
+                score: 0,
+                answered: false
+            };
+            document.getElementById('dq-body').classList.remove('hidden');
+            document.getElementById('dq-result').classList.add('hidden');
+            document.getElementById('daily-quiz-modal').classList.remove('hidden');
+            renderDailyQuizStep();
+        }
+
+        function closeDailyMiniQuiz() {
+            document.getElementById('daily-quiz-modal').classList.add('hidden');
+        }
+
+        function speakDailyQuizWord() {
+            const q = appState.dailyQuizState.questions[appState.dailyQuizState.index];
+            if (q) speakJapanese(q.jp, 0.8);
+        }
+
+        function renderDailyQuizStep() {
+            const st = appState.dailyQuizState;
+            const total = st.questions.length;
+            if (st.index >= total) {
+                document.getElementById('dq-body').classList.add('hidden');
+                document.getElementById('dq-result').classList.remove('hidden');
+                document.getElementById('dq-score-text').textContent = `您答對了 ${st.score} / ${total} 題！`;
+                return;
+            }
+
+            const current = st.questions[st.index];
+            st.answered = false;
+            document.getElementById('dq-progress').textContent = `第 ${st.index + 1} / ${total} 題`;
+            document.getElementById('dq-word-jp').textContent = current.jp;
+            document.getElementById('dq-word-romaji').textContent = current.romaji;
+            speakJapanese(current.jp, 0.8);
+
+            const allWords = appState.dailyLesson.words;
+            const distractors = allWords.filter(w => w.jp !== current.jp)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            const options = [current, ...distractors].sort(() => Math.random() - 0.5);
+
+            const optContainer = document.getElementById('dq-options');
+            optContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full py-3 px-4 rounded-2xl border-2 border-stone-200 bg-washi/60 hover:border-indigoJP text-sm font-bold text-indigoDark transition text-left flex items-center justify-between';
+                btn.innerHTML = `<span>${opt.meaning}</span>`;
+                btn.onclick = () => {
+                    if (st.answered) return;
+                    st.answered = true;
+                    if (opt.jp === current.jp) {
+                        st.score++;
+                        btn.classList.add('border-matcha', 'bg-emerald-50', 'text-matcha');
+                        btn.innerHTML += '<i class="fa-solid fa-check"></i>';
+                    } else {
+                        btn.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-600');
+                        btn.innerHTML += '<i class="fa-solid fa-xmark"></i>';
+                    }
+                    setTimeout(() => {
+                        st.index++;
+                        renderDailyQuizStep();
+                    }, 900);
+                };
+                optContainer.appendChild(btn);
+            });
+        }
+
+        function updateApiKeyStatusUI() {
+            const savedKey = (localStorage.getItem('wafu_custom_gemini_apikey') || '').trim();
+            const label = document.getElementById('apikey-status-label');
+            const btn = document.getElementById('desktop-apikey-btn');
+            if (!label || !btn) return;
+            if (savedKey) {
+                label.textContent = 'API 已連結';
+                btn.classList.add('border-matcha/40', 'bg-emerald-50/70', 'text-matcha');
+                btn.classList.remove('bg-stone-100', 'text-stone-600');
+            } else {
+                label.textContent = 'API 設定';
+                btn.classList.remove('border-matcha/40', 'bg-emerald-50/70', 'text-matcha');
+                btn.classList.add('bg-stone-100', 'text-stone-600');
+            }
+        }
+
+        function resetAllProgress() {
+            localStorage.removeItem('wafu_kana_progress_v1');
+            localStorage.removeItem('wafu_saved_vocab_v1');
+            localStorage.removeItem('wafu_seen_ai_words_v1');
+            localStorage.removeItem('wafu_ai_daily_lesson_v1');
+            appState.masteredIds = [];
+            appState.starredIds = [];
+            appState.combo = 0;
+            appState.reviewedCount = 0;
+            appState.savedVocab = [];
+            appState.seenAIWords = [];
+            updateDashboardStats();
+            updateSavedVocabBadge();
+            resetPracticeQueue();
+            renderKanaChart();
+            showToast('已重置所有學習進度！', 'info');
+        }
+
+        function openApiKeyModal() {
+            const savedKey = localStorage.getItem('wafu_custom_gemini_apikey') || '';
+            const input = document.getElementById('input-gemini-apikey');
+            if (input) {
+                input.value = savedKey;
+                input.type = 'password';
+            }
+            const eyeIcon = document.getElementById('apikey-eye-icon');
+            if (eyeIcon) eyeIcon.className = 'fa-regular fa-eye text-xs';
+            document.getElementById('apikey-modal').classList.remove('hidden');
+        }
+
+        function closeApiKeyModal() {
+            document.getElementById('apikey-modal').classList.add('hidden');
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('input-gemini-apikey');
+            const eyeIcon = document.getElementById('apikey-eye-icon');
+            if (!input || !eyeIcon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.className = 'fa-regular fa-eye-slash text-xs';
+            } else {
+                input.type = 'password';
+                eyeIcon.className = 'fa-regular fa-eye text-xs';
+            }
+        }
+
+        function saveCustomApiKey() {
+            const input = document.getElementById('input-gemini-apikey');
+            const val = (input?.value || '').trim();
+            if (!val) {
+                showToast('請輸入有效的 Gemini API Key！', 'warning');
+                return;
+            }
+            localStorage.setItem('wafu_custom_gemini_apikey', val);
+            updateApiKeyStatusUI();
+            closeApiKeyModal();
+            showToast('✅ Gemini API 金鑰已儲存並啟用！', 'success');
+            if (appState.vocabSubtab === 'ai-daily') {
+                generateDailyAILesson(true);
+            }
+        }
+
+        function clearCustomApiKey() {
+            localStorage.removeItem('wafu_custom_gemini_apikey');
+            const input = document.getElementById('input-gemini-apikey');
+            if (input) input.value = '';
+            updateApiKeyStatusUI();
+            showToast('已清除自訂 API 金鑰', 'info');
+        }
+
+        // 網頁載入完成後初始化
+        window.onload = function () {
+            initSpeechSynthesis();
+            loadProgress();
+            updateApiKeyStatusUI();
+            updateDashboardStats();
+            updateSavedVocabBadge();
+            resetPracticeQueue();
+            renderKanaChart();
+            renderStarterVocab();
+            initDailyAILesson();
+        };
+    </script>
+</body>
+</html>
